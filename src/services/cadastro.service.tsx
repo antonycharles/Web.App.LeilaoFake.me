@@ -8,13 +8,13 @@ export const cadastroService = {
 };
 
 
-function cadastrar(nome: string, email :string) : Promise<boolean> {
+function cadastrar(nome: string, email :string) : Promise<IUsuarioLogado> {
     localStorage.setItem('user-info','');
 
     return inscrevaseServidor(nome, email)
-            .then(dados => {
+            .then((dados : IUsuarioLogado) => {
                 localStorage.setItem('user-info',JSON.stringify(dados));
-                return true;
+                return dados;
             })
 }
 

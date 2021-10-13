@@ -1,18 +1,13 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { logarService } from '../../services/logar.service'
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { IErroDefault } from '../../interfaces/erro.default';
+import { cadastroService } from '../../services/cadastro.service';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
 import { IUsuarioLogado } from '../../interfaces/usuario.logado';
 import AppFormErro from '../AppFormErro';
 
-export default function AppLogar(props: { openModal: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function AppCadastro(props: { openModal: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+    const [nome, setNome] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [erroMessage, setErroMessage] = React.useState({})
 
@@ -27,14 +22,14 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
     const handleSubmit = (event: React.FormEvent<EventTarget>) => {
         event.preventDefault();
 
-        logarService.logar(email)
+        cadastroService.cadastrar(nome, email)
             .then((resultado: IUsuarioLogado) => {
                 setEmail("");
                 setErroMessage({})
                 handleClose()
                 autenticacaoContext.setAuthenticated(resultado);
             })
-            .catch((erros : IErroDefault) => {
+            .catch((erros: IErroDefault) => {
                 setErroMessage(erros)
             })
     }
@@ -43,12 +38,27 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
         <div>
             <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" >
                 <form onSubmit={handleSubmit}>
-                    <DialogTitle sx={{ borderBottom: 1, borderColor: 'grey.500', mb: "20px" }}>Entrar</DialogTitle>
-                    <DialogContent>
+                    <DialogTitle sx={{ borderBottom: 1, borderColor: 'grey.500', mb: "20px" }}>Cadastro</DialogTitle>
+                    <DialogContent
+                        sx={{
+                            '& .MuiTextField-root': { mb: '20px' },
+                        }}
+                    >
                         <DialogContentText sx={{ mb: "20px" }}>
-                            Informe seu e-mail cadastrado:
+                            Informe nome e e-mail para se cadastrar:
                         </DialogContentText>
                         <AppFormErro erro={erroMessage} />
+                        <TextField
+                            autoFocus
+                            id="nome"
+                            name="nome"
+                            label="nome"
+                            type="nome"
+                            value={nome}
+                            onChange={event => setNome(event.target.value)}
+                            fullWidth
+                            required
+                        />
                         <TextField
                             autoFocus
                             id="email"
@@ -63,7 +73,7 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="error">Sair</Button>
-                        <Button type="submit" color="success">Logar</Button>
+                        <Button type="submit" color="success">Cadastrar</Button>
                     </DialogActions>
                 </form>
             </Dialog>

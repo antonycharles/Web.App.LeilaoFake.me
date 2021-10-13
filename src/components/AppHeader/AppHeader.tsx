@@ -10,18 +10,25 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { Logout, Settings } from '@mui/icons-material';
 import { Container } from '@mui/material';
-import Logar from '../AppLogar/AppLogar';
+import AppLogar from '../AppLogar';
+import AppCadastro from '../AppCadastro';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
 import { autenticadoModel } from '../../models/autenticado.model';
 
 export default function AppHeader() {
     const [openModalLogar, setOpenModalLogar] = React.useState(false);
+    const [openModalCadastro, setOpenModalCadastro] = React.useState(false);
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
 
     const handleClickOpenModalLogar = () => {
         setOpenModalLogar(true);
+    };
+
+    const handleClickOpenModalCadastro = () => {
+        setOpenModalCadastro(true);
     };
 
 
@@ -37,6 +44,17 @@ export default function AppHeader() {
             autenticacaoContext.setAuthenticated(autenticadoModel.naoAutenticado());
     }
 
+    const getPrimeiraLetraNome = () => {
+        try{
+            if(autenticacaoContext.autenticado.usuario.nome === "")
+                return 'L';
+
+            return autenticacaoContext.autenticado.usuario.nome.substr(0,1).toUpperCase();
+        }catch{
+            return 'L'
+        }
+    }
+
     return (
         <React.Fragment>
             <Container sx={{ bgcolor: '#f5f5f5' }}>
@@ -45,7 +63,7 @@ export default function AppHeader() {
                     <Typography sx={{ minWidth: 100 }}>Leilões</Typography>
                     <Tooltip title="Account settings">
                         <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-                            <Avatar sx={{ width: 32, height: 32 }}>L</Avatar>
+                            <Avatar sx={{ width: 32, height: 32 }}>{getPrimeiraLetraNome()}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>
@@ -87,7 +105,7 @@ export default function AppHeader() {
                         <MenuItem onClick={handleClickOpenModalLogar}>Logar</MenuItem>
                     }
                     {!autenticacaoContext.autenticado.authenticated &&
-                        <MenuItem>Inscreva-se</MenuItem>
+                        <MenuItem onClick={handleClickOpenModalCadastro}>Inscreva-se</MenuItem>
                     }
                     {autenticacaoContext.autenticado.authenticated &&
                         <MenuItem>
@@ -107,7 +125,8 @@ export default function AppHeader() {
                     }
                 </Menu>
             </Container>
-            <Logar openModal={openModalLogar} closeModal={setOpenModalLogar} />
+            <AppLogar openModal={openModalLogar} closeModal={setOpenModalLogar} />
+            <AppCadastro openModal={openModalCadastro} closeModal={setOpenModalCadastro} />
         </React.Fragment>
     );
 }
