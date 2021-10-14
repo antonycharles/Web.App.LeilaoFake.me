@@ -8,17 +8,10 @@ import AutenticadoContext from "./contexts/AutenticadoContext"
 import { autenticadoModel } from "./models/autenticado.model"
 
 function App() {
-  const [autenticado, setAuthenticated] = React.useState(autenticadoModel.naoAutenticado());
-
-  const updateSetAuthenticated = (dados: any) => {
-    console.log('================================================')
-    console.log(dados);
-    setAuthenticated(dados.authenticated)
-  }
-  
+  const [autenticado, setAuthenticated] = React.useState(autenticadoModel.userAutenticado());
 
   return (
-    <AutenticadoContext.Provider value={{autenticado,setAuthenticated}}>
+    <AutenticadoContext.Provider value={{autenticado: autenticadoModel.userAutenticado(),setAuthenticated}}>
       <AppHeader />
       <AppMenu />
       <AppBody />

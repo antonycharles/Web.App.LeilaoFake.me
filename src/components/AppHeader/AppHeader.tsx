@@ -40,7 +40,8 @@ export default function AppHeader() {
     };
 
     const handleClickSair = () => {
-        autenticacaoContext.setAuthenticated(autenticadoModel.naoAutenticado());
+        autenticadoModel.sair()
+        autenticacaoContext.setAuthenticated(autenticadoModel.userAutenticado());
     }
 
     const getPrimeiraLetraNome = () => {

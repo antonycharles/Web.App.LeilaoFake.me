@@ -41,7 +41,7 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" sx={{ mt: '-40%'}} >
+            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm">
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>Entrar</DialogTitle>
                     <DialogContent>

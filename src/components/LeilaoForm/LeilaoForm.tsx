@@ -29,7 +29,7 @@ export default function LeilaoForm(props: {
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="md" sx={{ mt: '-25%' }}>
+            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="md">
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>{props.title}</DialogTitle>
                     <DialogContent

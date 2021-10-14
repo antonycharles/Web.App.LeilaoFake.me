@@ -36,7 +36,7 @@ export default function AppCadastro(props: { openModal: boolean, closeModal: Rea
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" sx={{ mt: '-33%'}} >
+            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm">
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>Cadastro</DialogTitle>
                     <DialogContent

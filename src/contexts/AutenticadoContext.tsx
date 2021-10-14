@@ -3,7 +3,7 @@ import { IUsuarioLogado } from "../interfaces/usuario.logado";
 import { autenticadoModel } from "../models/autenticado.model"
 
 const AutenticadoContext = createContext({
-    autenticado: autenticadoModel.naoAutenticado(),
+    autenticado: autenticadoModel.userAutenticado(),
     setAuthenticated: (dados:IUsuarioLogado) => {}
 });
 
