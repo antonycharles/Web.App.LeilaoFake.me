@@ -13,7 +13,7 @@ export default function LeilaoCard(props:{title:string}) {
           component="img"
           height="200"
           image="https://via.placeholder.com/350X300"
-          alt="green iguana"
+          alt={props.title}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2" noWrap>
@@ -23,7 +23,7 @@ export default function LeilaoCard(props:{title:string}) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          Share
+          Compartilhar
         </Button>
       </CardActions>
     </Card>

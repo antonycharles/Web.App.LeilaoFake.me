@@ -40,7 +40,6 @@ function inscrevaseServidor(nome: string, email: string) : Promise<IUsuarioLogad
 
 function getDadosErro(error : any) : IErroDefault
 {
-    const code = 0;
     return {
         code: error.response.data.code,
         message: error.response.data.message,

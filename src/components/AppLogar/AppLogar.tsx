@@ -41,9 +41,9 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" >
+            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" sx={{ mt: '-40%'}} >
                 <form onSubmit={handleSubmit}>
-                    <DialogTitle sx={{ borderBottom: 1, borderColor: 'grey.500', mb: "20px" }}>Entrar</DialogTitle>
+                    <DialogTitle>Entrar</DialogTitle>
                     <DialogContent>
                         <DialogContentText sx={{ mb: "20px" }}>
                             Informe seu e-mail cadastrado:

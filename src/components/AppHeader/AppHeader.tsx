@@ -4,12 +4,11 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import { Logout, Settings } from '@mui/icons-material';
-import { Container } from '@mui/material';
+import { ControlPoint, Logout, Search, Settings } from '@mui/icons-material';
+import { Button, Container, Grid, InputAdornment, TextField } from '@mui/material';
 import AppLogar from '../AppLogar';
 import AppCadastro from '../AppCadastro';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
@@ -41,29 +40,28 @@ export default function AppHeader() {
     };
 
     const handleClickSair = () => {
-            autenticacaoContext.setAuthenticated(autenticadoModel.naoAutenticado());
+        autenticacaoContext.setAuthenticated(autenticadoModel.naoAutenticado());
     }
 
     const getPrimeiraLetraNome = () => {
-        try{
-            if(autenticacaoContext.autenticado.usuario.nome === "")
+        try {
+            if (autenticacaoContext.autenticado.usuario.nome === "")
                 return 'L';
 
-            return autenticacaoContext.autenticado.usuario.nome.substr(0,1).toUpperCase();
-        }catch{
+            return autenticacaoContext.autenticado.usuario.nome.substr(0, 1).toUpperCase();
+        } catch {
             return 'L'
         }
     }
 
     return (
         <React.Fragment>
-            <Container sx={{ bgcolor: '#f5f5f5' }}>
+            <Container>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', paddingBottom: '10px' }}>
                     <Typography variant="h4" component="h1"><b>Leilão Fake</b></Typography>
-                    <Typography sx={{ minWidth: 100 }}>Leilões</Typography>
                     <Tooltip title="Account settings">
-                        <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-                            <Avatar sx={{ width: 32, height: 32 }}>{getPrimeiraLetraNome()}</Avatar>
+                        <IconButton onClick={handleClick} size="small" sx={{ ml: 2, }}>
+                            <Avatar sx={{ bgcolor: 'warning.main' }}>{getPrimeiraLetraNome()}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>

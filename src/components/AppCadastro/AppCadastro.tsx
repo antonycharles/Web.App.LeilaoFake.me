@@ -36,9 +36,9 @@ export default function AppCadastro(props: { openModal: boolean, closeModal: Rea
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" >
+            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm" sx={{ mt: '-33%'}} >
                 <form onSubmit={handleSubmit}>
-                    <DialogTitle sx={{ borderBottom: 1, borderColor: 'grey.500', mb: "20px" }}>Cadastro</DialogTitle>
+                    <DialogTitle>Cadastro</DialogTitle>
                     <DialogContent
                         sx={{
                             '& .MuiTextField-root': { mb: '20px' },
@@ -60,7 +60,6 @@ export default function AppCadastro(props: { openModal: boolean, closeModal: Rea
                             required
                         />
                         <TextField
-                            autoFocus
                             id="email"
                             name="email"
                             label="email"
