@@ -9,5 +9,4 @@ export interface ILeilaoPaginacao {
     order: string,
     resultados : Array<ILeilao>,
     links : Array<ILink>
-    
 }

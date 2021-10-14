@@ -20,13 +20,13 @@ function cadastrar(nome: string, email :string) : Promise<IUsuarioLogado> {
 
 function inscrevaseServidor(nome: string, email: string) : Promise<IUsuarioLogado> {
 
-    var raw = {
+    var request = {
         "email": email,
         "nome": nome
     };
 
 
-    return axios.post(`${dados.api_url}/Login/cadastro`,raw)
+    return axios.post(`${dados.api_url}/Login/cadastro`,request)
         .then(response => {
             return response.data as unknown as IUsuarioLogado;
         })

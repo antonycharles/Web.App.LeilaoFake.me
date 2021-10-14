@@ -1,11 +1,16 @@
 import React from 'react';
-import { ControlPoint, Logout, Search, Settings } from '@mui/icons-material';
-import { Button, Container, Grid, InputAdornment, TextField } from '@mui/material';
+import { ControlPoint, Search } from '@mui/icons-material';
+import { Breadcrumbs, Button, ButtonGroup, Container, Grid, InputAdornment, Link, TextField } from '@mui/material';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
 import LeilaoForm from '../LeilaoForm';
 
 export default function AppMenu() {
     const [openModalNovoLeilao, setOpenModalNovoLeilao] = React.useState(false);
+    const [value, setValue] = React.useState(2);
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
 
@@ -36,13 +41,18 @@ export default function AppMenu() {
                         </form>
                     </Grid>
                     <Grid>
-                        {autenticacaoContext.autenticado.authenticated &&
-                            <Button
-                                variant="contained"
-                                color="success"
-                                startIcon={<ControlPoint />}
-                                onClick={() => {setOpenModalNovoLeilao(true)}}> Leilão</Button>
-                        }
+                        <ButtonGroup variant="text" aria-label="text button group">
+                            <Button sx={{ color: 'text.primary' }}>Leilões</Button>
+                            {autenticacaoContext.autenticado.authenticated &&
+                                <Button sx={{ color: 'text.primary' }}>Meus leilões</Button>
+                            }
+                            {autenticacaoContext.autenticado.authenticated &&
+                                <Button
+                                    variant="text"
+                                    color="success"
+                                    onClick={() => { setOpenModalNovoLeilao(true) }}> Adicionar</Button>
+                            }
+                        </ButtonGroup>
                     </Grid>
                 </Grid>
             </Container>

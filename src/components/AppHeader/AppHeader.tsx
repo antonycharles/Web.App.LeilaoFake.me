@@ -107,14 +107,6 @@ export default function AppHeader() {
                         <MenuItem onClick={handleClickOpenModalCadastro}>Inscreva-se</MenuItem>
                     }
                     {autenticacaoContext.autenticado.authenticated &&
-                        <MenuItem>
-                            <ListItemIcon>
-                                <Settings fontSize="small" />
-                            </ListItemIcon>
-                            Meus leilões
-                        </MenuItem>
-                    }
-                    {autenticacaoContext.autenticado.authenticated &&
                         <MenuItem onClick={handleClickSair}>
                             <ListItemIcon>
                                 <Logout fontSize="small" />

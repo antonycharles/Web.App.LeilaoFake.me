@@ -1,17 +1,24 @@
 import { ILeilaoPaginacao } from "../interfaces/leilao.paginacao.js";
 import axios from "axios";
-import dados from "../dados.json"
+import config from "../dados.json"
 import { ILeilao } from "../interfaces/leilao.js";
 import { IErroDefault } from "../interfaces/erro.default.js";
 
-export const cadastroService = {
+export const leiloesService = {
     getLeiloesPublicos,
     getMeusLeiloes,
     getLeilaoId
 };
 
-function getLeiloesPublicos(): Promise<ILeilaoPaginacao> {
-    return axios.get(`${dados.api_url}/Leilao`)
+function getLeiloesPublicos(dados:ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
+    const request = {
+        pagina: dados.pagina,
+        porPagina: dados.porPagina,
+        order: dados.order,
+        search: dados.search
+    }
+
+    return axios.get(`${config.api_url}/Leilao`,{params:request})
         .then(response => {
             return response.data as unknown as ILeilaoPaginacao;
         })
@@ -46,7 +53,7 @@ function getMeusLeiloes(): Promise<ILeilaoPaginacao> {
 }
 
 function getLeilaoId(leilaoId: string): Promise<ILeilao> {
-    return fetch(`${dados.api_url}/leilao/${leilaoId}`, {
+    return fetch(`${config.api_url}/leilao/${leilaoId}`, {
         method: 'GET'
     })
         .then(res => {
