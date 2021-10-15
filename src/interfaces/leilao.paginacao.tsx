@@ -7,6 +7,7 @@ export interface ILeilaoPaginacao {
     total: number,
     porPagina: number,
     order: string,
+    meusLeiloes: boolean,
     resultados : Array<ILeilao>,
     links : Array<ILink>
 }

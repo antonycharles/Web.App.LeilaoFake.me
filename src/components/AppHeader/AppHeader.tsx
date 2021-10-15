@@ -13,6 +13,8 @@ import AppLogar from '../AppLogar';
 import AppCadastro from '../AppCadastro';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
 import { autenticadoModel } from '../../models/autenticado.model';
+import LeiloesPaginacaoContext from '../../contexts/LeiloesPaginacaoContext';
+import { leiloesPaginacaoModel } from '../../models/leiloes.paginacao.model';
 
 export default function AppHeader() {
     const [openModalLogar, setOpenModalLogar] = React.useState(false);
@@ -21,6 +23,7 @@ export default function AppHeader() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
+    const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     const handleClickOpenModalLogar = () => {
         setOpenModalLogar(true);
@@ -42,6 +45,8 @@ export default function AppHeader() {
     const handleClickSair = () => {
         autenticadoModel.sair()
         autenticacaoContext.setAuthenticated(autenticadoModel.userAutenticado());
+        leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue());
+
     }
 
     const getPrimeiraLetraNome = () => {

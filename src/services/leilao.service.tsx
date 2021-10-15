@@ -1,8 +1,9 @@
-import { ILeilaoPaginacao } from "../interfaces/leilao.paginacao.js";
+import { ILeilaoPaginacao } from "../interfaces/leilao.paginacao";
 import axios from "axios";
 import config from "../dados.json"
-import { ILeilao } from "../interfaces/leilao.js";
-import { IErroDefault } from "../interfaces/erro.default.js";
+import { ILeilao } from "../interfaces/leilao";
+import { IErroDefault } from "../interfaces/erro.default";
+import { autenticadoModel } from "../models/autenticado.model";
 
 export const leiloesService = {
     getLeiloesPublicos,
@@ -10,19 +11,31 @@ export const leiloesService = {
     getLeilaoId
 };
 
-function getLeiloesPublicos(dados:ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
+function getLeiloesPublicos(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
+
+    if (dados.meusLeiloes) {
+        const usuarioLogado = autenticadoModel.userAutenticado();
+        if(usuarioLogado.authenticated == false){
+            return Promise.reject({
+                message: "Usuário não autenticado!"
+            });
+        }
+    }
+
     const request = {
         pagina: dados.pagina,
         porPagina: dados.porPagina,
         order: dados.order,
+        meusLeiloes: dados.meusLeiloes,
         search: dados.search
     }
 
-    return axios.get(`${config.api_url}/Leilao`,{params:request})
+    return axios.get(`${config.api_url}/Leilao`, { params: request, })
         .then(response => {
             return response.data as unknown as ILeilaoPaginacao;
         })
         .then((dados: ILeilaoPaginacao) => {
+            console.log(dados);
             return dados;
         })
         .catch(error => {

@@ -4,24 +4,27 @@ import LeiloesPaginacaoContext from '../../contexts/LeiloesPaginacaoContext';
 import { ILeilaoPaginacao } from '../../interfaces/leilao.paginacao';
 import { leiloesService } from '../../services/leilao.service';
 import AppMenu from '../AppMenu';
+import LeilaoProximaPagina from '../LeilaoProximaPagina'
 import LeilaoList from '../LeilaoList';
+import { IErroDefault } from '../../interfaces/erro.default';
 
 export default function AppBody() {
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     useEffect(() => {
-        // Update the document title using the browser API
-        if(leiloesPaginacaoContext.dados.total == 0){
-            leiloesService.getLeiloesPublicos(leiloesPaginacaoContext.dados)
+        leiloesService.getLeiloesPublicos(leiloesPaginacaoContext.dados)
             .then((dados: ILeilaoPaginacao) => {
-                leiloesPaginacaoContext.setDados(dados);
-            }).catch(erros => {
+                if (leiloesPaginacaoContext.dados.total == 0 && dados.resultados.length > 0)
+                    leiloesPaginacaoContext.setDados(dados);
+            }).catch((erros:IErroDefault) => {
                 console.log(erros);
             });
-        }
     });
 
     return (
-        <LeilaoList />
+        <>
+            <LeilaoList />
+            <LeilaoProximaPagina />
+        </>
     );
 }

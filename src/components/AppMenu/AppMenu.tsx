@@ -3,16 +3,29 @@ import { ControlPoint, Search } from '@mui/icons-material';
 import { Breadcrumbs, Button, ButtonGroup, Container, Grid, InputAdornment, Link, TextField } from '@mui/material';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
 import LeilaoForm from '../LeilaoForm';
+import LeiloesPaginacaoContext from '../../contexts/LeiloesPaginacaoContext';
+import { leiloesPaginacaoModel } from '../../models/leiloes.paginacao.model';
+import { ILeilaoPaginacao } from '../../interfaces/leilao.paginacao';
+import { leiloesService } from '../../services/leilao.service';
 
 export default function AppMenu() {
     const [openModalNovoLeilao, setOpenModalNovoLeilao] = React.useState(false);
-    const [value, setValue] = React.useState(2);
-
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
+    const [search, setSearch] = React.useState("");
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
+    const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+
+    const handleSubmit = (event: React.FormEvent<EventTarget>) => {
+        event.preventDefault();
+
+        const dados = leiloesPaginacaoModel.mudancaPesquisa(leiloesPaginacaoContext.dados, search);
+        leiloesService.getLeiloesPublicos(dados)
+            .then((dados: ILeilaoPaginacao) => {
+                leiloesPaginacaoContext.setDados(dados);
+            }).catch(erros => {
+                console.log(erros);
+            });
+    }
 
     return (
         <React.Fragment>
@@ -24,12 +37,14 @@ export default function AppMenu() {
                     alignItems="flex-start"
                 >
                     <Grid>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <TextField
-                                id="standard-basic"
+                                id="search"
                                 label=""
                                 placeholder="Pesquisa..."
                                 variant="standard"
+                                value={search}
+                                onChange={event => setSearch(event.target.value)}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
@@ -42,15 +57,23 @@ export default function AppMenu() {
                     </Grid>
                     <Grid>
                         <ButtonGroup variant="text" aria-label="text button group">
-                            <Button sx={{ color: 'text.primary' }}>Leilões</Button>
+                            <Button
+                                sx={{ color: 'text.primary' }}
+                                onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue())}
+                                disabled={leiloesPaginacaoContext.dados.meusLeiloes == false}
+                            >Leilões</Button>
                             {autenticacaoContext.autenticado.authenticated &&
-                                <Button sx={{ color: 'text.primary' }}>Meus leilões</Button>
+                                <Button
+                                    sx={{ color: 'text.primary' }}
+                                    onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())}
+                                    disabled={leiloesPaginacaoContext.dados.meusLeiloes}
+                                >Meus leilões</Button>
                             }
                             {autenticacaoContext.autenticado.authenticated &&
                                 <Button
                                     variant="text"
                                     color="success"
-                                    onClick={() => { setOpenModalNovoLeilao(true) }}> Adicionar</Button>
+                                    onClick={() => { setOpenModalNovoLeilao(true) }}> Adiciona</Button>
                             }
                         </ButtonGroup>
                     </Grid>

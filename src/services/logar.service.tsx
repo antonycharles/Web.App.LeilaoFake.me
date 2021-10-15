@@ -1,7 +1,7 @@
 import axios from "axios";
 import dados from "../dados.json"
-import { IErroDefault } from "../interfaces/erro.default.js";
-import { IUsuarioLogado } from "../interfaces/usuario.logado.js";
+import { IErroDefault } from "../interfaces/erro.default";
+import { IUsuarioLogado } from "../interfaces/usuario.logado";
 
 export const logarService = {
     logar,

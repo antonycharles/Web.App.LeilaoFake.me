@@ -15,8 +15,8 @@ function App() {
 
   return (
     <AutenticadoContext.Provider value={{ autenticado: autenticadoModel.userAutenticado(), setAuthenticated }}>
-      <AppHeader />
       <LeiloesPaginacaoContext.Provider value={{ dados: leiloesPaginacao, setDados: setLeiloesPaginacao }}>
+        <AppHeader />
         <AppMenu />
         <AppBody />
       </LeiloesPaginacaoContext.Provider>
