@@ -15,10 +15,12 @@ import AutenticadoContext from '../../contexts/AutenticadoContext';
 import { autenticadoModel } from '../../models/autenticado.model';
 import LeiloesPaginacaoContext from '../../contexts/LeiloesPaginacaoContext';
 import { leiloesPaginacaoModel } from '../../models/leiloes.paginacao.model';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function AppHeader() {
     const [openModalLogar, setOpenModalLogar] = React.useState(false);
     const [openModalCadastro, setOpenModalCadastro] = React.useState(false);
+    let location = useLocation();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

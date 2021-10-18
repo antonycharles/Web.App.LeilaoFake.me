@@ -7,20 +7,10 @@ import { autenticadoModel } from "../models/autenticado.model";
 
 export const leiloesService = {
     getLeiloesPublicos,
-    getMeusLeiloes,
     getLeilaoId
 };
 
 function getLeiloesPublicos(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
-
-    if (dados.meusLeiloes) {
-        const usuarioLogado = autenticadoModel.userAutenticado();
-        if(usuarioLogado.authenticated == false){
-            return Promise.reject({
-                message: "Usuário não autenticado!"
-            });
-        }
-    }
 
     const request = {
         pagina: dados.pagina,
@@ -43,38 +33,18 @@ function getLeiloesPublicos(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> 
         });
 }
 
-function getMeusLeiloes(): Promise<ILeilaoPaginacao> {
-    /*
-    const usuarioLogado = await this.loginService.userLogado();
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", "Bearer " + usuarioLogado.accessToken)
-
-    return fetch(`${dados.api_url}/leilao/meus-leiloes`, {
-        method: 'GET',
-        headers: myHeaders
-    })
-    .then(res => {
-        return res.json();
-    })
-    .then((dados: ILeilaoPaginacao) => {
-        return dados;
-    });
-    */
-    return Promise.reject()
-}
-
-function getLeilaoId(leilaoId: string): Promise<ILeilao> {
-    return fetch(`${config.api_url}/leilao/${leilaoId}`, {
-        method: 'GET'
-    })
-        .then(res => {
-            return res.json();
+function getLeilaoId(leilao_id: string): Promise<ILeilao> {
+    return axios.get(`${config.api_url}/leilao/${leilao_id}`)
+        .then(response => {
+            return response.data as unknown as ILeilao;
         })
-        .then((dados: ILeilao) => {
+        .then((dados : ILeilao) => {
             return dados;
         })
+        .catch(error => {
+            return Promise.reject(getDadosErro(error));
+        });
+
 }
 
 function getDadosErro(error: any): IErroDefault {

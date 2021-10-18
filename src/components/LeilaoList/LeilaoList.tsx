@@ -13,7 +13,7 @@ export default function LeilaoList() {
                     {leiloesPaginacaoContext.dados.resultados.map((item) => {
                         return (
                             <Grid key={item.id} item xs={1} sm={4} md={4}>
-                                <LeilaoCard title={item.titulo} />
+                                <LeilaoCard leilao={item} />
                             </Grid>
                         );
                     })}
