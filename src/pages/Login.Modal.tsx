@@ -6,32 +6,35 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { logarService } from '../../services/logar.service'
-import { IErroDefault } from '../../interfaces/erro.default';
-import AutenticadoContext from '../../contexts/AutenticadoContext';
-import { IUsuarioLogado } from '../../interfaces/usuario.logado';
-import AppFormErro from '../AppFormErro';
+import { logarService } from '../services/logar.service'
+import { IErroDefault } from '../interfaces/erro.default';
+import AutenticadoContext from '../contexts/AutenticadoContext';
+import { IUsuarioLogado } from '../interfaces/usuario.logado';
+import AppFormErro from '../components/AppFormErro';
+import { useHistory, useParams } from "react-router-dom";
 
-export default function AppLogar(props: { openModal: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+function LoginModal(){
     const [email, setEmail] = React.useState("");
     const [erroMessage, setErroMessage] = React.useState({})
 
+    let history = useHistory();
+
     const autenticacaoContext = React.useContext(AutenticadoContext);
 
-    const handleClose = () => {
-        setEmail("");
-        setErroMessage({})
-        props.closeModal(false);
+    const handleClose = (event: any) => {
+        event.stopPropagation();
+        history.goBack();
     };
 
     const handleSubmit = (event: React.FormEvent<EventTarget>) => {
         event.preventDefault();
+        event.stopPropagation();
 
         logarService.logar(email)
             .then((resultado: IUsuarioLogado) => {
                 setEmail("");
                 setErroMessage({})
-                handleClose()
+                history.goBack();
                 autenticacaoContext.setAuthenticated(resultado);
             })
             .catch((erros : IErroDefault) => {
@@ -41,7 +44,7 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm">
+            <Dialog open={true} onClose={handleClose} fullWidth={true} maxWidth="sm">
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>Entrar</DialogTitle>
                     <DialogContent>
@@ -70,3 +73,5 @@ export default function AppLogar(props: { openModal: boolean, closeModal: React.
         </div>
     );
 }
+
+export default LoginModal;

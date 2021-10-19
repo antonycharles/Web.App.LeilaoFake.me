@@ -1,7 +1,5 @@
-import dados  from "../dados.json"
-import axios from "axios";
-import { IErroDefault } from "../interfaces/erro.default";
 import { IUsuarioLogado } from "../interfaces/usuario.logado";
+import { baseService } from "./base.service";
 
 export const cadastroService = {
     cadastrar
@@ -26,7 +24,7 @@ function inscrevaseServidor(nome: string, email: string) : Promise<IUsuarioLogad
     };
 
 
-    return axios.post(`${dados.api_url}/Login/cadastro`,request)
+    return baseService.getApi().post(`/Login/cadastro`,request)
         .then(response => {
             return response.data as unknown as IUsuarioLogado;
         })
@@ -34,16 +32,6 @@ function inscrevaseServidor(nome: string, email: string) : Promise<IUsuarioLogad
             return dados;
         })
         .catch(error => {
-            return Promise.reject(getDadosErro(error));
+            return Promise.reject(baseService.defaultErro(error));
         });
-}
-
-function getDadosErro(error : any) : IErroDefault
-{
-    return {
-        code: error.response.data.code,
-        message: error.response.data.message,
-        details: error.response.data.details,
-        innerError:error.response.data.innerError
-    }
 }

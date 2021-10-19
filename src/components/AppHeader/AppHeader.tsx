@@ -1,47 +1,36 @@
 import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import IconButton from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-import { ControlPoint, Logout, Search, Settings } from '@mui/icons-material';
-import { Button, Container, Grid, InputAdornment, TextField } from '@mui/material';
-import AppLogar from '../AppLogar';
-import AppCadastro from '../AppCadastro';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import { Logout } from '@mui/icons-material';
+import { Button, ButtonGroup, Container, ListItemIcon } from '@mui/material';
 import AutenticadoContext from '../../contexts/AutenticadoContext';
 import { autenticadoModel } from '../../models/autenticado.model';
 import LeiloesPaginacaoContext from '../../contexts/LeiloesPaginacaoContext';
 import { leiloesPaginacaoModel } from '../../models/leiloes.paginacao.model';
-import { Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function AppHeader() {
-    const [openModalLogar, setOpenModalLogar] = React.useState(false);
-    const [openModalCadastro, setOpenModalCadastro] = React.useState(false);
     let location = useLocation();
+    let history = useHistory();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
-    const handleClickOpenModalLogar = () => {
-        setOpenModalLogar(true);
-    };
-
-    const handleClickOpenModalCadastro = () => {
-        setOpenModalCadastro(true);
-    };
-
-
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
     };
 
     const handleClickSair = () => {
@@ -51,80 +40,126 @@ export default function AppHeader() {
 
     }
 
-    const getPrimeiraLetraNome = () => {
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const getPrimeiroNome = () => {
         try {
             if (autenticacaoContext.autenticado.usuario.nome === "")
-                return 'L';
+                return '';
 
-            return autenticacaoContext.autenticado.usuario.nome.substr(0, 1).toUpperCase();
+            return autenticacaoContext.autenticado.usuario.nome.split(' ')[0];
         } catch {
-            return 'L'
+            return ''
         }
     }
 
     return (
-        <React.Fragment>
-            <Container>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', paddingBottom: '10px' }}>
-                    <Typography variant="h4" component="h1"><b>Leilão Fake</b></Typography>
-                    <Tooltip title="Account settings">
-                        <IconButton onClick={handleClick} size="small" sx={{ ml: 2, }}>
-                            <Avatar sx={{ bgcolor: 'warning.main' }}>{getPrimeiraLetraNome()}</Avatar>
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    onClick={handleClose}
-                    PaperProps={{
-                        elevation: 0,
-                        sx: {
-                            overflow: 'visible',
-                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                            mt: 1.5,
-                            '& .MuiAvatar-root': {
-                                width: 32,
-                                height: 32,
-                                ml: -0.5,
-                                mr: 1,
-                            },
-                            '&:before': {
-                                content: '""',
-                                display: 'block',
-                                position: 'absolute',
-                                top: 0,
-                                right: 14,
-                                width: 10,
-                                height: 10,
-                                bgcolor: 'background.paper',
-                                transform: 'translateY(-50%) rotate(45deg)',
-                                zIndex: 0,
-                            },
-                        },
-                    }}
-                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                >
-                    {!autenticacaoContext.autenticado.authenticated &&
-                        <MenuItem onClick={handleClickOpenModalLogar}>Logar</MenuItem>
-                    }
-                    {!autenticacaoContext.autenticado.authenticated &&
-                        <MenuItem onClick={handleClickOpenModalCadastro}>Inscreva-se</MenuItem>
-                    }
-                    {autenticacaoContext.autenticado.authenticated &&
-                        <MenuItem onClick={handleClickSair}>
-                            <ListItemIcon>
-                                <Logout fontSize="small" />
-                            </ListItemIcon>
-                            Sair
-                        </MenuItem>
-                    }
-                </Menu>
-            </Container>
-            <AppLogar openModal={openModalLogar} closeModal={setOpenModalLogar} />
-            <AppCadastro openModal={openModalCadastro} closeModal={setOpenModalCadastro} />
-        </React.Fragment>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static" color="default">
+                <Container>
+                    <Toolbar>
+                        <Typography variant="h4" component="h1" sx={{ flexGrow: 1,fontWeight:'bold' }}>
+                            Leilão Fake
+                        </Typography>
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleClick}
+                                color="inherit"
+                                sx={{ borderRadius: '5%' }}
+                            >
+                                <Typography sx={{ textTransform: 'capitalize' }}>{getPrimeiroNome()}</Typography>
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                onClick={handleClose}
+                                PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: 'visible',
+                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                        mt: 1.5,
+                                        '& .MuiAvatar-root': {
+                                            width: 32,
+                                            height: 32,
+                                            ml: -0.5,
+                                            mr: 1,
+                                        },
+                                        '&:before': {
+                                            content: '""',
+                                            display: 'block',
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 14,
+                                            width: 10,
+                                            height: 10,
+                                            bgcolor: 'background.paper',
+                                            transform: 'translateY(-50%) rotate(45deg)',
+                                            zIndex: 0,
+                                        },
+                                    },
+                                }}
+                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                            >
+                                {!autenticacaoContext.autenticado.authenticated &&
+                                    <MenuItem component="a" onClick={(event: any) => {
+                                        event.stopPropagation();
+                                        history.push(`/login`, { background: location });
+                                    }}>
+                                        Logar</MenuItem>
+                                }
+                                {!autenticacaoContext.autenticado.authenticated &&
+                                    <MenuItem component="a" onClick={(event: any) => {
+                                        event.stopPropagation();
+                                        history.push(`/cadastro`, { background: location });
+                                    }}>Inscreva-se</MenuItem>
+                                }
+                                {autenticacaoContext.autenticado.authenticated &&
+                                    <MenuItem component="a" onClick={handleClickSair}>
+                                        <ListItemIcon>
+                                            <Logout fontSize="small" />
+                                        </ListItemIcon>
+                                        Sair
+                                    </MenuItem>
+                                }
+                            </Menu>
+                        </div>
+                    </Toolbar>
+                </Container>
+                <Container>
+                    <ButtonGroup variant="text" aria-label="text button group" color="inherit" fullWidth={true}> 
+                        <Button
+                            sx={{ color: 'text.primary' }}
+                            onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue())}
+                            disabled={leiloesPaginacaoContext.dados.meusLeiloes == false}
+                        >Leilões</Button>
+                        {autenticacaoContext.autenticado.authenticated &&
+                            <Button
+                                sx={{ color: 'text.primary' }}
+                                onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())}
+                                disabled={leiloesPaginacaoContext.dados.meusLeiloes}
+                            >Meus leilões</Button>
+                        }
+                        {autenticacaoContext.autenticado.authenticated &&
+                            <Button
+                                variant="text"
+                                color="success" onClick={(event: any) => {
+                                    event.stopPropagation();
+                                    history.push(`/leilao-incluir`, { background: location });
+                                }}> Adiciona</Button>
+                        }
+                    </ButtonGroup>
+                </Container>
+            </AppBar>
+        </Box>
     );
 }

@@ -19,7 +19,7 @@ export default function AppMenu() {
         event.preventDefault();
 
         const dados = leiloesPaginacaoModel.mudancaPesquisa(leiloesPaginacaoContext.dados, search);
-        leiloesService.getLeiloesPublicos(dados)
+        leiloesService.getLeiloes(dados)
             .then((dados: ILeilaoPaginacao) => {
                 leiloesPaginacaoContext.setDados(dados);
             }).catch(erros => {
@@ -56,36 +56,10 @@ export default function AppMenu() {
                         </form>
                     </Grid>
                     <Grid>
-                        <ButtonGroup variant="text" aria-label="text button group">
-                            <Button
-                                sx={{ color: 'text.primary' }}
-                                onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue())}
-                                disabled={leiloesPaginacaoContext.dados.meusLeiloes == false}
-                            >Leilões</Button>
-                            {autenticacaoContext.autenticado.authenticated &&
-                                <Button
-                                    sx={{ color: 'text.primary' }}
-                                    onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())}
-                                    disabled={leiloesPaginacaoContext.dados.meusLeiloes}
-                                >Meus leilões</Button>
-                            }
-                            {autenticacaoContext.autenticado.authenticated &&
-                                <Button
-                                    variant="text"
-                                    color="success"
-                                    onClick={() => { setOpenModalNovoLeilao(true) }}> Adiciona</Button>
-                            }
-                        </ButtonGroup>
+                        
                     </Grid>
                 </Grid>
             </Container>
-            <LeilaoForm
-                title="Novo leilão"
-                btnAcao="Incluir"
-                funcaoAcao={() => { }}
-                openModal={openModalNovoLeilao}
-                changeModal={setOpenModalNovoLeilao}
-            />
         </React.Fragment>
     );
 }

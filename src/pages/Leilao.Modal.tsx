@@ -6,8 +6,7 @@ import { ILeilao } from "../interfaces/leilao";
 import { IErroDefault } from "../interfaces/erro.default";
 import LeilaoShow from "../components/LeilaoShow";
 
-function LeilaoModalPage() {
-    const [open, setOpen] = React.useState(true);
+function LeilaoModal() {
     const [leilao, setLeilao] = React.useState<ILeilao | undefined>(undefined)
     let history = useHistory();
     let { leilao_id } = useParams<{ leilao_id: string }>();
@@ -29,7 +28,7 @@ function LeilaoModalPage() {
 
     return (
         <div>
-            <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
+            <Dialog open={true} onClose={handleClose} fullWidth={true} maxWidth="lg">
                 <DialogContent>
                     <LeilaoShow leilao={leilao} />
                 </DialogContent>
@@ -41,4 +40,4 @@ function LeilaoModalPage() {
     );
 }
 
-export default LeilaoModalPage;
+export default LeilaoModal;

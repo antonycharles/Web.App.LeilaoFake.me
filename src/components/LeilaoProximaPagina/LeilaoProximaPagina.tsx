@@ -15,7 +15,7 @@ export default function LeilaoProximaPagina() {
 
     const handleButtonMaisClick = () => {
         const dados = leiloesPaginacaoModel.proximaPagina(leiloesPaginacaoContext.dados);
-        leiloesService.getLeiloesPublicos(dados)
+        leiloesService.getLeiloes(dados)
             .then((dados: ILeilaoPaginacao) => {
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.updateDados(
                     leiloesPaginacaoContext.dados,

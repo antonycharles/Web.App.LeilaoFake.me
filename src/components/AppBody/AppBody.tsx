@@ -12,14 +12,14 @@ export default function AppBody() {
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     useEffect(() => {
-        leiloesService.getLeiloesPublicos(leiloesPaginacaoContext.dados)
+        leiloesService.getLeiloes(leiloesPaginacaoContext.dados)
             .then((dados: ILeilaoPaginacao) => {
                 if (leiloesPaginacaoContext.dados.total == 0 && dados.resultados.length > 0)
                     leiloesPaginacaoContext.setDados(dados);
             }).catch((erros:IErroDefault) => {
                 console.log(erros);
             });
-    });
+    },[leiloesPaginacaoContext.dados]);
 
     return (
         <>

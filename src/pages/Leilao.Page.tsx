@@ -9,8 +9,9 @@ import { ILeilao } from "../interfaces/leilao";
 import { leiloesService } from "../services/leilao.service";
 
 function LeilaoPage() {
-    const [leilao, setLeilao] = React.useState<ILeilao | undefined>(undefined)
     let history = useHistory();
+    
+    const [leilao, setLeilao] = React.useState<ILeilao | undefined>(undefined)
     let { leilao_id } = useParams<{ leilao_id: string }>();
 
     useEffect(() => {

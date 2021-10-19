@@ -1,7 +1,5 @@
-import axios from "axios";
-import dados from "../dados.json"
-import { IErroDefault } from "../interfaces/erro.default";
 import { IUsuarioLogado } from "../interfaces/usuario.logado";
+import { baseService } from "./base.service";
 
 export const logarService = {
     logar,
@@ -25,7 +23,7 @@ function sair(): void {
 
 
 function autenticacaoServidor(email: string): Promise<IUsuarioLogado> {
-    return axios.post(`${dados.api_url}/Login`, {
+    return baseService.getApi().post(`/Login`, {
         "email": email
     })
         .then(response => {
@@ -35,16 +33,7 @@ function autenticacaoServidor(email: string): Promise<IUsuarioLogado> {
             return dados;
         })
         .catch(error => {
-            return Promise.reject(getDadosErro(error.response));
+            console.log(error.response)
+            return Promise.reject(baseService.defaultErro(error));
         });
-}
-
-function getDadosErro(error: any): IErroDefault {
-    const code = 0;
-    return {
-        code: error.data.code,
-        message: error.data.message,
-        details: error.data.details,
-        innerError: error.data.innerError
-    }
 }

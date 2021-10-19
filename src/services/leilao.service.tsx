@@ -1,16 +1,13 @@
 import { ILeilaoPaginacao } from "../interfaces/leilao.paginacao";
-import axios from "axios";
-import config from "../dados.json"
 import { ILeilao } from "../interfaces/leilao";
-import { IErroDefault } from "../interfaces/erro.default";
-import { autenticadoModel } from "../models/autenticado.model";
+import { baseService } from "./base.service";
 
 export const leiloesService = {
-    getLeiloesPublicos,
+    getLeiloes,
     getLeilaoId
 };
 
-function getLeiloesPublicos(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
+function getLeiloes(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
 
     const request = {
         pagina: dados.pagina,
@@ -20,7 +17,7 @@ function getLeiloesPublicos(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> 
         search: dados.search
     }
 
-    return axios.get(`${config.api_url}/Leilao`, { params: request, })
+    return baseService.getApi().get(`/Leilao`, { params: request, })
         .then(response => {
             return response.data as unknown as ILeilaoPaginacao;
         })
@@ -29,12 +26,12 @@ function getLeiloesPublicos(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> 
             return dados;
         })
         .catch(error => {
-            return Promise.reject(getDadosErro(error));
+            return Promise.reject(baseService.defaultErro(error));
         });
 }
 
 function getLeilaoId(leilao_id: string): Promise<ILeilao> {
-    return axios.get(`${config.api_url}/leilao/${leilao_id}`)
+    return baseService.getApi().get(`/leilao/${leilao_id}`)
         .then(response => {
             return response.data as unknown as ILeilao;
         })
@@ -42,16 +39,7 @@ function getLeilaoId(leilao_id: string): Promise<ILeilao> {
             return dados;
         })
         .catch(error => {
-            return Promise.reject(getDadosErro(error));
+            return Promise.reject(baseService.defaultErro(error));
         });
 
-}
-
-function getDadosErro(error: any): IErroDefault {
-    return {
-        code: error.response.data.code,
-        message: error.response.data.message,
-        details: error.response.data.details,
-        innerError: error.response.data.innerError
-    }
 }
