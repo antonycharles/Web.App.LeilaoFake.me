@@ -1,4 +1,4 @@
-import {ILeilaoPaginacao} from '../interfaces/leilao.paginacao'
+import ILeilaoPaginacao from '../interfaces/leilao.paginacao'
 
 export const leiloesPaginacaoModel = {
     defaultValue,

@@ -1,7 +1,7 @@
-import { ILeilao } from "./leilao.js";
-import { ILink } from "./link.js";
+import ILeilao from "./leilao";
+import ILink from "./link";
 
-export interface ILeilaoPaginacao {
+export default interface ILeilaoPaginacao {
     search: string,
     pagina: number,
     total: number,

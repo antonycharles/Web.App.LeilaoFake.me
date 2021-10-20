@@ -1,4 +1,4 @@
-import { IUsuarioLogado } from "../interfaces/usuario.logado";
+import IUsuarioLogado from "../interfaces/usuario.logado";
 import { baseService } from "./base.service";
 
 export const logarService = {

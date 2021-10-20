@@ -1,4 +1,4 @@
-import { IErroDefault } from "../interfaces/erro.default";
+import IErroDefault from "interfaces/erro.default";
 import dados from "../dados.json"
 import axios, { AxiosInstance } from "axios";
 import { autenticadoModel } from "../models/autenticado.model";

@@ -1,8 +1,8 @@
-import { ILance } from "./lance.js";
-import { ILink } from "./link.js";
-import { IUsuario } from "./usuario.js";
+import ILance from "./lance";
+import ILink  from "./link";
+import IUsuario  from "./usuario";
 
-export interface ILeilao {
+export default interface ILeilao {
     id: string,
     leiloadoPorId: string,
     leiloadoPOr: IUsuario,

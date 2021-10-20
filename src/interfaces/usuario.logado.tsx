@@ -1,6 +1,6 @@
-import { IUsuario } from "./usuario.js";
+import IUsuario from "./usuario";
 
-export interface IUsuarioLogado {
+export default interface IUsuarioLogado {
     authenticated: boolean,
     created: Date,
     expiration: Date,

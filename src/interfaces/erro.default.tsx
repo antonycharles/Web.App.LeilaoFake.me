@@ -1,4 +1,4 @@
-export interface IErroDefault {
+export default interface IErroDefault {
     code?: number,
     message: string,
     details?: Array<string>,

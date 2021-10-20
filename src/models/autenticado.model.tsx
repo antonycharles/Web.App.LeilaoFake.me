@@ -1,5 +1,5 @@
 import moment from "moment";
-import { IUsuarioLogado } from "../interfaces/usuario.logado";
+import IUsuarioLogado from "../interfaces/usuario.logado";
 
 export const autenticadoModel = {
     userAutenticado,
@@ -9,7 +9,7 @@ export const autenticadoModel = {
 function userAutenticado(): IUsuarioLogado {
 
     const userInfo = localStorage.getItem('user-info')
-    if (userInfo && userInfo != '') {
+    if (userInfo && userInfo !== '') {
         const usuarioLogado: IUsuarioLogado = JSON.parse(userInfo);
 
         const dataExpiration = moment.utc(usuarioLogado.expiration);

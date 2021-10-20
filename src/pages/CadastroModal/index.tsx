@@ -1,22 +1,24 @@
 import React from 'react';
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
-import { IErroDefault } from '../../interfaces/erro.default';
-import { cadastroService } from '../../services/cadastro.service';
-import AutenticadoContext from '../../contexts/AutenticadoContext';
-import { IUsuarioLogado } from '../../interfaces/usuario.logado';
-import AppFormErro from '../AppFormErro';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import  IErroDefault from 'interfaces/erro.default';
+import { cadastroService } from 'services/cadastro.service';
+import AutenticadoContext from 'contexts/AutenticadoContext';
+import IUsuarioLogado  from 'interfaces/usuario.logado';
+import AppFormErro from 'components/AppFormErro';
+import { useHistory } from 'react-router-dom';
 
-export default function AppCadastro(props: { openModal: boolean, closeModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+function CadastroModal() {
+    let history = useHistory();
+
     const [nome, setNome] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [erroMessage, setErroMessage] = React.useState({})
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
 
-    const handleClose = () => {
-        setEmail("");
-        setErroMessage({})
-        props.closeModal(false);
+    const handleClose = (event: any) => {
+        event.stopPropagation();
+        history.goBack();
     };
 
     const handleSubmit = (event: React.FormEvent<EventTarget>) => {
@@ -26,7 +28,7 @@ export default function AppCadastro(props: { openModal: boolean, closeModal: Rea
             .then((resultado: IUsuarioLogado) => {
                 setEmail("");
                 setErroMessage({})
-                handleClose()
+                history.goBack();
                 autenticacaoContext.setAuthenticated(resultado);
             })
             .catch((erros: IErroDefault) => {
@@ -36,7 +38,7 @@ export default function AppCadastro(props: { openModal: boolean, closeModal: Rea
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="sm">
+            <Dialog open={true} onClose={handleClose} fullWidth={true} maxWidth="sm">
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>Cadastro</DialogTitle>
                     <DialogContent
@@ -79,3 +81,5 @@ export default function AppCadastro(props: { openModal: boolean, closeModal: Rea
         </div>
     );
 }
+
+export default CadastroModal;

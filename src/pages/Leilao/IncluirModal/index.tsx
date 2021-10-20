@@ -1,41 +1,64 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@mui/material";
-import React from "react";
+import * as React from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@mui/material";
+import { useHistory } from "react-router-dom";
+import AppFormErro from 'components/AppFormErro';
+import { leilaoService } from 'services/leilao.service'
+import IErroDefault from 'interfaces/erro.default';
+import ILeilao from 'interfaces/leilao';
+import moment from 'moment';
+import LeiloesPaginacaoContext from 'contexts/LeiloesPaginacaoContext';
+import { leiloesPaginacaoModel } from 'models/leiloes.paginacao.model';
 
-export default function LeilaoForm(props: {
-    title: string,
-    btnAcao: string,
-    funcaoAcao:any,
-    openModal: boolean,
-    changeModal: React.Dispatch<React.SetStateAction<boolean>>
-}) {
+function LeilaoIncluirModal() {
     const [titulo, setTitulo] = React.useState("");
     const [lanceMinimo, setLanceMinimo] = React.useState("");
     const [dataInicio, setDataInicio] = React.useState("");
     const [dataFim, setDataFim] = React.useState("");
     const [descricao, setDescricao] = React.useState("");
-    
-    const handleClose = () => {
-        props.changeModal(false);
+
+    const [erroMessage, setErroMessage] = React.useState({})
+
+    const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+
+    let history = useHistory();
+
+    const handleClose = (event: any) => {
+        event.stopPropagation();
+        history.goBack();
     };
 
     const handleSubmit = (event: React.FormEvent<EventTarget>) => {
         event.preventDefault();
-        console.log('titulo => ' + titulo)
-        console.log('lanceMinimo => ' + lanceMinimo)
-        console.log('dataInicio => ' + dataInicio)
-        console.log('dataFim => ' + dataFim)
-        console.log('descricao => ' + descricao)
+        event.stopPropagation();
+
+        
+        leilaoService.incluir({
+            titulo,
+            descricao,
+            lanceMinimo:parseFloat(lanceMinimo),
+            dataInicio:moment.utc(moment(dataInicio).utc()).format(),
+            dataFim:moment.utc(moment(dataFim).utc()).format()
+        })
+            .then((resultado: ILeilao) => {
+                setErroMessage({})
+                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
+                history.goBack();
+            })
+            .catch((erros: IErroDefault) => {
+                setErroMessage(erros)
+            })
     }
 
     return (
         <div>
-            <Dialog open={props.openModal} onClose={handleClose} fullWidth={true} maxWidth="md">
+            <Dialog open={true} onClose={handleClose} fullWidth={true} maxWidth="md">
                 <form onSubmit={handleSubmit}>
-                    <DialogTitle>{props.title}</DialogTitle>
+                    <DialogTitle>Novo leilão</DialogTitle>
                     <DialogContent
                         sx={{
                             '& .MuiTextField-root': { mt: '10px' },
                         }}>
+                        <AppFormErro erro={erroMessage} />
                         <Grid container spacing={2}>
                             <Grid item xs={8}>
                                 <TextField
@@ -111,3 +134,5 @@ export default function LeilaoForm(props: {
         </div>
     );
 }
+
+export default LeilaoIncluirModal;

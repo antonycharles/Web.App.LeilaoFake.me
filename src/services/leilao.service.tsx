@@ -1,10 +1,14 @@
-import { ILeilaoPaginacao } from "../interfaces/leilao.paginacao";
-import { ILeilao } from "../interfaces/leilao";
+import ILeilaoPaginacao from "interfaces/leilao.paginacao";
+import ILeilao from "interfaces/leilao";
+import ILeilaoIncluir from "interfaces/leilao.incluir";
 import { baseService } from "./base.service";
 
-export const leiloesService = {
+export const leilaoService = {
     getLeiloes,
-    getLeilaoId
+    getLeilaoId,
+    incluir,
+    executaPatch,
+    deletar
 };
 
 function getLeiloes(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
@@ -42,4 +46,37 @@ function getLeilaoId(leilao_id: string): Promise<ILeilao> {
             return Promise.reject(baseService.defaultErro(error));
         });
 
+}
+
+function incluir(leilao : ILeilaoIncluir) : Promise<ILeilao> {
+    return baseService.getApi().post('/leilao',leilao)
+        .then(response => {
+            return response.data as unknown as ILeilao;
+        })
+        .then((dados : ILeilao) => {
+            return dados;
+        })
+        .catch(error => {
+            return Promise.reject(baseService.defaultErro(error));
+        })
+}
+
+function executaPatch(url:string, mensagemSucesso:string) : Promise<string> {
+    return  baseService.getApi().patch(url)
+    .then(response => {
+        return mensagemSucesso;
+    })
+    .catch(error => {
+        return Promise.reject(baseService.defaultErro(error));
+    });
+}
+
+function deletar(url:string) : Promise<string> {
+    return baseService.getApi().delete(url)
+    .then(response => {
+        return 'Item deletado com sucesso!';
+    })
+    .catch(error => {
+        return Promise.reject(baseService.defaultErro(error));
+    });
 }

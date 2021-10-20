@@ -1,6 +1,6 @@
-import { IUsuario } from "./usuario.js";
+import IUsuario from "./usuario";
 
-export interface ILance {
+export default interface ILance {
     id: string,
     criadoEm: Date,
     valor: number,
