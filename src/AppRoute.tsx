@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import HomePage from "./pages/HomePage";
+import Pagina404 from 'pages/Pagina404';
 import LeilaoApresentacao from "pages/Leilao/Apresentacao";
 import { Location } from "history";
 import { Route, Switch, useLocation } from "react-router-dom";
@@ -18,10 +19,16 @@ function AppRoute() {
         <>
             <Switch location={background || location}>
                 <Route exact path="/">
-                    <HomePage />
+                    <HomePage isMeusLeiloes={false} />
+                </Route>
+                <Route exact path="/meus-leiloes">
+                    <HomePage isMeusLeiloes={true} />
                 </Route>
                 <Route exact path="/leilao/:leilao_id">
                     <LeilaoApresentacao isModal={false} />
+                </Route>
+                <Route exact >
+                    <Pagina404/>
                 </Route>
             </Switch>
 

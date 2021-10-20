@@ -11,8 +11,6 @@ import { Logout } from '@mui/icons-material';
 import { Button, ButtonGroup, Container, ListItemIcon } from '@mui/material';
 import AutenticadoContext from 'contexts/AutenticadoContext';
 import { autenticadoModel } from 'models/autenticado.model';
-import LeiloesPaginacaoContext from 'contexts/LeiloesPaginacaoContext';
-import { leiloesPaginacaoModel } from 'models/leiloes.paginacao.model';
 import { useHistory, useLocation } from 'react-router-dom';
 
 export default function AppHeader() {
@@ -22,7 +20,6 @@ export default function AppHeader() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
-    const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,7 +29,7 @@ export default function AppHeader() {
     const handleClickSair = () => {
         autenticadoModel.sair()
         autenticacaoContext.setAuthenticated(autenticadoModel.userAutenticado());
-        leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue());
+        history.push('/')
 
     }
 
@@ -50,6 +47,8 @@ export default function AppHeader() {
             return ''
         }
     }
+    
+    
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -135,14 +134,12 @@ export default function AppHeader() {
                     <ButtonGroup variant="text" aria-label="text button group" color="inherit" fullWidth={true}> 
                         <Button
                             sx={{ color: 'text.primary' }}
-                            onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue())}
-                            disabled={leiloesPaginacaoContext.dados.meusLeiloes === false}
+                            onClick={() => history.push('/')}
                         >Leilões</Button>
                         {autenticacaoContext.autenticado.authenticated &&
                             <Button
                                 sx={{ color: 'text.primary' }}
-                                onClick={() => leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())}
-                                disabled={leiloesPaginacaoContext.dados.meusLeiloes}
+                                onClick={ () => history.push('/meus-leiloes')}
                             >Meus leilões</Button>
                         }
                         {autenticacaoContext.autenticado.authenticated &&
