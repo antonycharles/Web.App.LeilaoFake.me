@@ -1,7 +1,8 @@
 import { Alert } from '@mui/material';
+import IErroDefault from 'interfaces/erro.default';
 import * as React from 'react';
 
-export default function AppFormErro(props: { erro: any }) {
+export default function AppFormErro(props: { erro: IErroDefault }) {
     const getMessage = () => {
         try {
             return props.erro.message;
@@ -12,7 +13,7 @@ export default function AppFormErro(props: { erro: any }) {
 
     const getDetails = () => {
         try {
-            if(props.erro.details === null || props.erro.details.length === 0)
+            if(props.erro.details === null || props.erro.details?.length === 0)
                 return '';
 
             return (

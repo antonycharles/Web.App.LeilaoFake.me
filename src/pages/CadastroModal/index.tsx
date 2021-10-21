@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
-import  IErroDefault from 'interfaces/erro.default';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import IErroDefault from 'interfaces/erro.default';
 import { cadastroService } from 'services/cadastro.service';
 import AutenticadoContext from 'contexts/AutenticadoContext';
-import IUsuarioLogado  from 'interfaces/usuario.logado';
+import IUsuarioLogado from 'interfaces/usuario.logado';
 import AppFormErro from 'components/AppFormErro';
 import { useHistory } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ function CadastroModal() {
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
 
-    const handleClose = (event: any) => {
+    const handleClose = (event:  React.FormEvent<EventTarget>) => {
         event.stopPropagation();
         history.goBack();
     };
@@ -49,7 +49,7 @@ function CadastroModal() {
                         <DialogContentText sx={{ mb: "20px" }}>
                             Informe nome e e-mail para se cadastrar:
                         </DialogContentText>
-                        <AppFormErro erro={erroMessage} />
+                        <AppFormErro erro={erroMessage as IErroDefault} />
                         <TextField
                             autoFocus
                             id="nome"
@@ -71,11 +71,11 @@ function CadastroModal() {
                             fullWidth
                             required
                         />
+                        <Box sx={{ textAlign: 'end' }}>
+                            <Button onClick={handleClose} color="error">Sair</Button>
+                            <Button type="submit" color="success" variant="contained">Cadastrar</Button>
+                        </Box>
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="error">Sair</Button>
-                        <Button type="submit" color="success">Cadastrar</Button>
-                    </DialogActions>
                 </form>
             </Dialog>
         </div>

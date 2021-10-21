@@ -8,12 +8,13 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import LoginModal from './pages/LoginModal';
 import CadastroModal from './pages/CadastroModal';
 import LeilaoIncluirModal from './pages/Leilao/IncluirModal';
+import LeilaoAlterarModal from 'pages/Leilao/AlterarModal';
 
 function AppRoute() {
 
-  let location = useLocation<{ background?: Location<{} | null | undefined> }>();
+    let location = useLocation<{ background?: Location<{} | null | undefined> }>();
 
-  let background = location.state && location.state.background;
+    let background = location.state && location.state.background;
 
     return (
         <>
@@ -28,17 +29,20 @@ function AppRoute() {
                     <LeilaoApresentacao isModal={false} />
                 </Route>
                 <Route exact >
-                    <Pagina404/>
+                    <Pagina404 />
                 </Route>
             </Switch>
 
             {background &&
                 <Switch location={location}>
+                    <Route exact path="/leilao/incluir">
+                        <LeilaoIncluirModal />
+                    </Route>
+                    <Route exact path="/leilao/alterar/:leilao_id">
+                        <LeilaoAlterarModal />
+                    </Route>
                     <Route exact path="/leilao/:leilao_id">
                         <LeilaoApresentacao isModal={true} />
-                    </Route>
-                    <Route exact path="/leilao-incluir">
-                        <LeilaoIncluirModal />
                     </Route>
                     <Route exact path="/login">
                         <LoginModal />

@@ -8,7 +8,8 @@ export const leilaoService = {
     getLeilaoId,
     incluir,
     executaPatch,
-    deletar
+    deletar,
+    update
 };
 
 function getLeiloes(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
@@ -40,6 +41,7 @@ function getLeilaoId(leilao_id: string): Promise<ILeilao> {
             return response.data as unknown as ILeilao;
         })
         .then((dados : ILeilao) => {
+            console.log(dados)
             return dados;
         })
         .catch(error => {
@@ -61,6 +63,16 @@ function incluir(leilao : ILeilaoIncluir) : Promise<ILeilao> {
         })
 }
 
+function update(url:string, leilao : ILeilaoIncluir) : Promise<string>{
+    return baseService.getApi().put(url,leilao)
+        .then(response => {
+            return 'Leilão alterado com sucesso!'
+        })
+        .catch(error => {
+            return Promise.reject(baseService.defaultErro(error));
+        })
+}
+
 function executaPatch(url:string, mensagemSucesso:string) : Promise<string> {
     return  baseService.getApi().patch(url)
     .then(response => {
@@ -74,7 +86,7 @@ function executaPatch(url:string, mensagemSucesso:string) : Promise<string> {
 function deletar(url:string) : Promise<string> {
     return baseService.getApi().delete(url)
     .then(response => {
-        return 'Item deletado com sucesso!';
+        return 'Leilao deletado com sucesso!';
     })
     .catch(error => {
         return Promise.reject(baseService.defaultErro(error));

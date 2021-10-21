@@ -1,36 +1,53 @@
-import * as React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@mui/material";
-import { useHistory } from "react-router-dom";
-import AppFormErro from 'components/AppFormErro';
+import React, { useEffect } from 'react';
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { useHistory, useParams } from "react-router-dom";
 import { leilaoService } from 'services/leilao.service'
 import IErroDefault from 'interfaces/erro.default';
 import ILeilao from 'interfaces/leilao';
 import LeiloesPaginacaoContext from 'contexts/LeiloesPaginacaoContext';
 import { leiloesPaginacaoModel } from 'models/leiloes.paginacao.model';
-import { datasService } from 'services/datas.service';
 import LeilaoForm from 'components/LeilaoForm';
 import ILeilaoIncluir from 'interfaces/leilao.incluir';
+import ILink from 'interfaces/link';
 
-function LeilaoIncluirModal() {
+function LeilaoAlterarModal() {
     const [leilao, setLeilao] = React.useState({} as ILeilao);
     const [erroMessage, setErroMessage] = React.useState({} as IErroDefault)
+    
+    let { leilao_id } = useParams<{ leilao_id: string }>();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     let history = useHistory();
+
+    useEffect(() => {
+        console.log(leilao_id)
+        leilaoService.getLeilaoId(leilao_id)
+            .then((dados: ILeilao) => {
+                if (leilao?.id !== leilao_id)
+                    setLeilao(dados)
+            }).catch((erros: IErroDefault) => {
+                history.push('/404');
+            });
+    }, [leilao, leilao_id]);
 
     const handleClose = (event: React.FormEvent<EventTarget>) => {
         event.stopPropagation();
         history.goBack();
     };
 
-    const handleSubmit = (leilaoIncluir : ILeilaoIncluir) => {
-        setLeilao({ ...leilao, ...leilaoIncluir } as unknown as ILeilao)
-        leilaoService.incluir(leilaoIncluir)
-            .then((resultado: ILeilao) => {
+    const getUrlAlterar = () : ILink => {
+        return leilao.links.find(x => x.rel === 'update') as ILink;
+    }
+
+    const handleSubmit = (leilaoAlterar : ILeilaoIncluir) => {
+        const link = getUrlAlterar();
+
+        leilaoService.update(link.href,leilaoAlterar)
+            .then((resultado: string) => {
                 setErroMessage({} as IErroDefault)
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
-                history.push('/meus-leiloes');
+                history.goBack();
             })
             .catch((erros: IErroDefault) => {
                 setErroMessage(erros)
@@ -40,13 +57,13 @@ function LeilaoIncluirModal() {
     return (
         <div>
             <Dialog open={true} onClose={handleClose} fullWidth={true} maxWidth="md">
-                <DialogTitle>Novo leilão</DialogTitle>
+                <DialogTitle>Alterar leilão</DialogTitle>
                 <DialogContent
                     sx={{
                         '& .MuiTextField-root': { mt: '20px' },
                     }}>
                     <LeilaoForm
-                        btnSubmitTexto="Incluir"
+                        btnSubmitTexto="Alterar"
                         btnSubmit={handleSubmit}
                         btnSair={handleClose}
                         errosMensage={erroMessage}
@@ -58,4 +75,4 @@ function LeilaoIncluirModal() {
     );
 }
 
-export default LeilaoIncluirModal;
+export default LeilaoAlterarModal;

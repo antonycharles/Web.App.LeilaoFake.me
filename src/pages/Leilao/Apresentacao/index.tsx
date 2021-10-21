@@ -28,7 +28,7 @@ function Apresentacao(props: { isModal: boolean }) {
             });
     }, [leilao, leilao_id]);
 
-    const handleClose = (event: any) => {
+    const handleClose = (event:  React.FormEvent<EventTarget>) => {
         event.stopPropagation();
         history.goBack();
     };

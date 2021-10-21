@@ -147,7 +147,7 @@ export default function AppHeader() {
                                 variant="text"
                                 color="success" onClick={(event: any) => {
                                     event.stopPropagation();
-                                    history.push(`/leilao-incluir`, { background: location });
+                                    history.push(`/leilao/incluir`, { background: location });
                                 }}> Adiciona</Button>
                         }
                     </ButtonGroup>

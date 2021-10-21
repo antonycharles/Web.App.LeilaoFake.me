@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import ILeilao from 'interfaces/leilao';
-import { Button, CardActionArea, CardActions, IconButton } from '@mui/material';
+import { Button, ButtonGroup, CardActionArea, CardActions, Grid, IconButton } from '@mui/material';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Share } from '@mui/icons-material';
 
@@ -36,14 +36,28 @@ export default function LeilaoCard(props: { leilao: ILeilao }) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        <IconButton aria-label="share"
-          onClick={() => handleClickCopiar(`${window.location.origin}/leilao/${props.leilao.id}`)}>
-          <Share />
-        </IconButton>
-        {props.leilao.isPublico === false &&
-          <Button size="small" color="error">Privado</Button>
-        }
+      <CardActions disableSpacing>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-end"
+        >
+          <Grid>
+            <IconButton aria-label="share"
+              onClick={() => handleClickCopiar(`${window.location.origin}/leilao/${props.leilao.id}`)}>
+              <Share />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <Grid>
+          <ButtonGroup variant="text" aria-label="text button group">
+            {props.leilao.isPublico === false &&
+              <Button size="small" color="error">Privado</Button>
+            }
+            <Button size="small" color="secondary">{props.leilao.status}</Button>
+          </ButtonGroup>
+        </Grid>
       </CardActions>
     </Card>
   );

@@ -1,25 +1,30 @@
 import React from 'react';
 import { Avatar, Button, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
 import { DateRange, AttachMoney, KeyboardArrowRight } from '@mui/icons-material';
+import { datasService } from 'services/datas.service';
 import ILeilao from 'interfaces/leilao';
-import moment from 'moment';
 import ILink from 'interfaces/link';
 import { deepOrange } from '@mui/material/colors';
+import { useHistory, useLocation } from 'react-router-dom';
 
 function LeilaoShow(props: {
     leilao: ILeilao,
     clickButtonDeletarLeilao: (url: string) => void,
     clickButtonExecutaPatch: (url: string, mensagem: string) => void
 }) {
+    let location = useLocation();
+    let history = useHistory();
 
     if (props.leilao === undefined) return null;
 
-    const apresentacaoData = (data: Date | undefined): string => {
-        return moment.utc(data).local().format('DD/MM/YYYY HH:mm:ss');
-    }
-
     const apresentacaoValor = (valor: number | undefined) => {
         return valor?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    }
+
+    const handleClick = (event: any) => {
+        console.log('testeste')
+        event.stopPropagation();
+        history.push(`/leilao/alterar/${props.leilao.id}`, { background: location });
     }
 
     return (
@@ -42,7 +47,7 @@ function LeilaoShow(props: {
                                     <DateRange />
                                 </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary="Data início" secondary={apresentacaoData(props.leilao.dataInicio)} />
+                            <ListItemText primary="Data início" secondary={datasService.apresentacaoData(props.leilao.dataInicio)} />
                         </ListItem>
                         <ListItem>
                             <ListItemAvatar>
@@ -50,7 +55,7 @@ function LeilaoShow(props: {
                                     <DateRange />
                                 </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary="Data fim" secondary={apresentacaoData(props.leilao.dataFim)} />
+                            <ListItemText primary="Data fim" secondary={datasService.apresentacaoData(props.leilao.dataFim)} />
                         </ListItem>
                         <ListItem>
                             <ListItemAvatar>
@@ -72,7 +77,7 @@ function LeilaoShow(props: {
                                         key={index}
                                         variant="outlined"
                                         color="secondary"
-                                    // onClick={ () => props.clickButtonExecutaPatch(item.href, item.metodo, 'Leilão alterado com sucesso!') }
+                                        onClick={handleClick}
                                     >Alterar</Button>);
                             }
 
@@ -105,7 +110,7 @@ function LeilaoShow(props: {
                                         onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
                                     >Cancelar</Button>);
                             }
-                            
+
                             if (item.rel === "finalizar") {
                                 return (
                                     <Button
