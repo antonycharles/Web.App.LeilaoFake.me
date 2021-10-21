@@ -7,11 +7,14 @@ import IErroDefault from "interfaces/erro.default";
 import LeilaoShow from "components/LeilaoShow";
 import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import LeiloesPaginacaoContext from "contexts/LeiloesPaginacaoContext";
+import { useSnackbar } from 'notistack';
 
 function Apresentacao(props: { isModal: boolean }) {
     const [leilao, setLeilao] = React.useState<ILeilao>()
     let history = useHistory();
     let { leilao_id } = useParams<{ leilao_id: string }>();
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
@@ -33,18 +36,34 @@ function Apresentacao(props: { isModal: boolean }) {
     const handleButtonDeleteclick = (url: string) => {
         leilaoService.deletar(url)
             .then(response => {
-                history.go(-1);
+                enqueueSnackbar(response, { variant: "success" });
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
+                history.go(-1);
             })
-            .catch((erros: IErroDefault) => {
-                console.log(erros)
-            })
+            .catch((erro: IErroDefault) => {
+                enqueueSnackbar(erro.message, {
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }, variant: "error"
+                });
+            });
     }
 
-    const handleButtonPatchClick = (url: string, metodo: string, mensagem: string) => {
-        console.log(url);
-        console.log(metodo);
-        console.log(mensagem);
+    const handleButtonPatchClick = (url: string, mensagem: string) => {
+        leilaoService.executaPatch(url, mensagem)
+            .then(response => {
+                enqueueSnackbar(response, { variant: "success" });
+                setLeilao({...leilao,id:""} as ILeilao);
+            })
+            .catch((erro: IErroDefault) => {
+                enqueueSnackbar(erro.message, {
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }, variant: "error"
+                });
+            });
     }
 
     return (
@@ -65,7 +84,7 @@ function Apresentacao(props: { isModal: boolean }) {
                 <Container sx={{ mt: '20px' }}>
                     <LeilaoShow
                         leilao={leilao as ILeilao}
-                        clickButtonDeletarLeilao={handleButtonDeleteclick} 
+                        clickButtonDeletarLeilao={handleButtonDeleteclick}
                         clickButtonExecutaPatch={handleButtonPatchClick} />
                 </Container>
             }

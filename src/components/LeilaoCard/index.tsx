@@ -41,7 +41,7 @@ export default function LeilaoCard(props: { leilao: ILeilao }) {
           onClick={() => handleClickCopiar(`${window.location.origin}/leilao/${props.leilao.id}`)}>
           <Share />
         </IconButton>
-        {props.leilao.isPublico == false &&
+        {props.leilao.isPublico === false &&
           <Button size="small" color="error">Privado</Button>
         }
       </CardActions>

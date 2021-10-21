@@ -15,17 +15,26 @@ function getApi(): AxiosInstance {
 
     const autenticado = autenticadoModel.userAutenticado();
 
-    if(autenticado.authenticated)
+    if (autenticado.authenticated)
         api.defaults.headers.common = { 'Authorization': `bearer ${autenticado.accessToken}` };
 
     return api;
 }
 
 function defaultErro(error: any): IErroDefault {
-    return {
-        code: error.response.data.code,
-        message: error.response.data.message,
-        details: error.response.data.details,
-        innerError: error.response.data.innerError
+    if (error.response.data !== "") {
+        return {
+            code: error.response.data.code,
+            message: error.response.data.message,
+            details: error.response.data.details,
+            innerError: error.response.data.innerError
+        }
     }
+
+    let mensagem = error.response.status + ' - ' + error.response.statusText;
+
+    if(error.response.status === 403)
+        mensagem = error.response.status + ' - Acesso não autorizado para está funcionalidade!';
+
+    return {message:mensagem}
 }

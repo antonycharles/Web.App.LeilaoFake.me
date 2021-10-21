@@ -1,17 +1,15 @@
 import React from 'react';
 import { Avatar, Button, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
-import { DateRange, AttachMoney } from '@mui/icons-material';
+import { DateRange, AttachMoney, KeyboardArrowRight } from '@mui/icons-material';
 import ILeilao from 'interfaces/leilao';
 import moment from 'moment';
 import ILink from 'interfaces/link';
-import AppFormErro from '../AppFormErro';
-import { useHistory } from 'react-router-dom';
 import { deepOrange } from '@mui/material/colors';
 
 function LeilaoShow(props: {
     leilao: ILeilao,
-    clickButtonDeletarLeilao: (url:string) => void,
-    clickButtonExecutaPatch: (url: string, metodo: string, mensagem: string) => void
+    clickButtonDeletarLeilao: (url: string) => void,
+    clickButtonExecutaPatch: (url: string, mensagem: string) => void
 }) {
 
     if (props.leilao === undefined) return null;
@@ -28,8 +26,16 @@ function LeilaoShow(props: {
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
-                    <img src="https://via.placeholder.com/350X300" style={{ width: '100%' }} />
+                    <img src="https://via.placeholder.com/350X300" style={{ width: '100%' }} alt="place holder" />
                     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                    <KeyboardArrowRight />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary="Status" secondary={props.leilao.status} />
+                        </ListItem>
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar sx={{ bgcolor: deepOrange[500] }}>
@@ -66,7 +72,7 @@ function LeilaoShow(props: {
                                         key={index}
                                         variant="outlined"
                                         color="secondary"
-                                        onClick={ () => props.clickButtonExecutaPatch(item.href, item.metodo, 'Leilão alterado com sucesso!') }
+                                    // onClick={ () => props.clickButtonExecutaPatch(item.href, item.metodo, 'Leilão alterado com sucesso!') }
                                     >Alterar</Button>);
                             }
 
@@ -76,7 +82,7 @@ function LeilaoShow(props: {
                                         key={index}
                                         variant="outlined"
                                         color="error"
-                                        onClick={ () => props.clickButtonDeletarLeilao(item.href)}
+                                        onClick={() => props.clickButtonDeletarLeilao(item.href)}
                                     >Deletar</Button>);
                             }
 
@@ -86,7 +92,7 @@ function LeilaoShow(props: {
                                         key={index}
                                         variant="outlined"
                                         color="success"
-                                        onClick={ () => props.clickButtonExecutaPatch(item.href, item.metodo, 'Leilão alterado com sucesso!') }
+                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
                                     >Inícia pregão</Button>);
                             }
 
@@ -96,8 +102,18 @@ function LeilaoShow(props: {
                                         key={index}
                                         variant="outlined"
                                         color="warning"
-                                        onClick={ () => props.clickButtonExecutaPatch(item.href, item.metodo, 'Leilão alterado com sucesso!') }
+                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
                                     >Cancelar</Button>);
+                            }
+                            
+                            if (item.rel === "finalizar") {
+                                return (
+                                    <Button
+                                        key={index}
+                                        variant="outlined"
+                                        color="inherit"
+                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão finalizado com sucesso!')}
+                                    >Finalizar</Button>)
                             }
 
                             if (item.rel === "tornar_publico") {
@@ -106,10 +122,9 @@ function LeilaoShow(props: {
                                         key={index}
                                         variant="outlined"
                                         color="info"
-                                        onClick={ () => props.clickButtonExecutaPatch(item.href, item.metodo, 'Leilão alterado com sucesso!') }
+                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
                                     >Tornar público</Button>)
                             }
-
                         })}
                     </Stack>
                     <Typography variant="body1" component="p" sx={{ mt: '30px' }} >{props.leilao.descricao}</Typography>
