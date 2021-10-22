@@ -20,10 +20,10 @@ function AppRoute() {
         <>
             <Switch location={background || location}>
                 <Route exact path="/">
-                    <HomePage isMeusLeiloes={false} />
+                    <HomePage />
                 </Route>
-                <Route exact path="/meus-leiloes">
-                    <HomePage isMeusLeiloes={true} />
+                <Route exact path="/:meus_leiloes">
+                    <HomePage />
                 </Route>
                 <Route exact path="/leilao/:leilao_id">
                     <LeilaoApresentacao isModal={false} />

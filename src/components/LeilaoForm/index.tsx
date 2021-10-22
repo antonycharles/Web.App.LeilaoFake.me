@@ -1,9 +1,8 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import AppFormErro from "components/AppFormErro";
 import IErroDefault from "interfaces/erro.default";
 import ILeilao from "interfaces/leilao";
 import ILeilaoIncluir from "interfaces/leilao.incluir";
-import moment from "moment";
 import React, { useEffect } from "react";
 import { datasService } from "services/datas.service";
 
@@ -16,7 +15,7 @@ export default function LeilaoForm(props: {
     leilao: ILeilao
 }) {
     const [titulo, setTitulo] = React.useState("");
-    const [lanceMinimo, setLanceMinimo] = React.useState(0.0);
+    const [lanceMinimo, setLanceMinimo] = React.useState("");
     const [dataInicio, setDataInicio] = React.useState("");
     const [dataFim, setDataFim] = React.useState("");
     const [descricao, setDescricao] = React.useState("");
@@ -28,7 +27,7 @@ export default function LeilaoForm(props: {
         props.btnSubmit({
             titulo,
             descricao,
-            lanceMinimo: lanceMinimo,
+            lanceMinimo: parseFloat(lanceMinimo),
             dataInicio: datasService.convertDataLocalToDataUtcString(dataInicio),
             dataFim: datasService.convertDataLocalToDataUtcString(dataFim)
         });
@@ -37,7 +36,7 @@ export default function LeilaoForm(props: {
     useEffect(() => {
         if (props.leilao.titulo !== undefined) {
             setTitulo(props.leilao.titulo);
-            setLanceMinimo(props.leilao.lanceMinimo);
+            setLanceMinimo(props.leilao.lanceMinimo.toString());
             setDataInicio(datasService.formataToInput(props.leilao.dataInicio));
             setDataFim(datasService.formataToInput(props.leilao.dataFim));
             setDescricao(props.leilao.descricao);
@@ -67,7 +66,7 @@ export default function LeilaoForm(props: {
                         id="lanceMinimo"
                         name="lanceMinimo"
                         value={lanceMinimo}
-                        onChange={event => setLanceMinimo(parseFloat(event.target.value))}
+                        onChange={event => setLanceMinimo(event.target.value)}
                         label="Lance mínimo"
                         type="number"
                         fullWidth

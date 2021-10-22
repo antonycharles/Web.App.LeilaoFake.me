@@ -1,30 +1,21 @@
 import React from 'react';
-import { Avatar, Button, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
+import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import { DateRange, AttachMoney, KeyboardArrowRight } from '@mui/icons-material';
 import { datasService } from 'services/datas.service';
+import LancesShow from 'components/LancesShow';
 import ILeilao from 'interfaces/leilao';
-import ILink from 'interfaces/link';
 import { deepOrange } from '@mui/material/colors';
-import { useHistory, useLocation } from 'react-router-dom';
 
 function LeilaoShow(props: {
     leilao: ILeilao,
-    clickButtonDeletarLeilao: (url: string) => void,
-    clickButtonExecutaPatch: (url: string, mensagem: string) => void
+    leilaoShowStack: JSX.Element,
+    lanceForm?: JSX.Element
 }) {
-    let location = useLocation();
-    let history = useHistory();
 
     if (props.leilao === undefined) return null;
 
     const apresentacaoValor = (valor: number | undefined) => {
         return valor?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    }
-
-    const handleClick = (event: any) => {
-        console.log('testeste')
-        event.stopPropagation();
-        history.push(`/leilao/alterar/${props.leilao.id}`, { background: location });
     }
 
     return (
@@ -69,70 +60,12 @@ function LeilaoShow(props: {
                 </Grid>
                 <Grid item xs={12} md={8}>
                     <Typography variant="h4" component="h2" gutterBottom>{props.leilao.titulo}</Typography>
-                    <Stack spacing={2} direction="row">
-                        {props.leilao.links.map((item: ILink, index) => {
-                            if (item.rel === "update") {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant="outlined"
-                                        color="secondary"
-                                        onClick={handleClick}
-                                    >Alterar</Button>);
-                            }
-
-                            if (item.rel === "delete") {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant="outlined"
-                                        color="error"
-                                        onClick={() => props.clickButtonDeletarLeilao(item.href)}
-                                    >Deletar</Button>);
-                            }
-
-                            if (item.rel === "iniciar_pregao") {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant="outlined"
-                                        color="success"
-                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
-                                    >Inícia pregão</Button>);
-                            }
-
-                            if (item.rel === "cancelar") {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant="outlined"
-                                        color="warning"
-                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
-                                    >Cancelar</Button>);
-                            }
-
-                            if (item.rel === "finalizar") {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant="outlined"
-                                        color="inherit"
-                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão finalizado com sucesso!')}
-                                    >Finalizar</Button>)
-                            }
-
-                            if (item.rel === "tornar_publico") {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant="outlined"
-                                        color="info"
-                                        onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
-                                    >Tornar público</Button>)
-                            }
-                        })}
-                    </Stack>
+                    {props.leilaoShowStack}
                     <Typography variant="body1" component="p" sx={{ mt: '30px' }} >{props.leilao.descricao}</Typography>
+                    {props.leilao.lances.length > 0 &&
+                        <LancesShow leilao={props.leilao} />
+                    }
+                    {props.lanceForm}
                 </Grid>
             </Grid>
         </>

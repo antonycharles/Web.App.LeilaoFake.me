@@ -47,7 +47,6 @@ function getLeilaoId(leilao_id: string): Promise<ILeilao> {
         .catch(error => {
             return Promise.reject(baseService.defaultErro(error));
         });
-
 }
 
 function incluir(leilao : ILeilaoIncluir) : Promise<ILeilao> {
@@ -86,7 +85,7 @@ function executaPatch(url:string, mensagemSucesso:string) : Promise<string> {
 function deletar(url:string) : Promise<string> {
     return baseService.getApi().delete(url)
     .then(response => {
-        return 'Leilao deletado com sucesso!';
+        return 'Leilão deletado com sucesso!';
     })
     .catch(error => {
         return Promise.reject(baseService.defaultErro(error));

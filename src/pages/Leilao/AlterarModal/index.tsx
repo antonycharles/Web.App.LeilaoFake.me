@@ -21,7 +21,6 @@ function LeilaoAlterarModal() {
     let history = useHistory();
 
     useEffect(() => {
-        console.log(leilao_id)
         leilaoService.getLeilaoId(leilao_id)
             .then((dados: ILeilao) => {
                 if (leilao?.id !== leilao_id)
@@ -29,7 +28,7 @@ function LeilaoAlterarModal() {
             }).catch((erros: IErroDefault) => {
                 history.push('/404');
             });
-    }, [leilao, leilao_id]);
+    }, [leilao_id]);
 
     const handleClose = (event: React.FormEvent<EventTarget>) => {
         event.stopPropagation();

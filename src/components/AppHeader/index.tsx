@@ -48,8 +48,6 @@ export default function AppHeader() {
         }
     }
     
-    
-
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" color="default">

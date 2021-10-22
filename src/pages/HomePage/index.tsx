@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Alert, Container } from "@mui/material";
 import LeilaoList from "components/LeilaoList";
 import LeilaoProximaPagina from "components/LeilaoProximaPagina";
 import LeiloesPaginacaoContext from "contexts/LeiloesPaginacaoContext";
@@ -10,34 +10,37 @@ import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import React, { useEffect } from "react";
 import { leilaoService } from "services/leilao.service";
 import { VariantType, useSnackbar } from 'notistack';
+import { useParams } from "react-router";
 
-function HomePage(props: {
-    isMeusLeiloes: boolean
-}) {
+function HomePage() {
     const [loading, setLoading] = React.useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
+    let { meus_leiloes } = useParams<{ meus_leiloes: string }>();
+
     useEffect(() => {
-        if (props.isMeusLeiloes) {
+        if (meus_leiloes === "meus-leiloes") {
             leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
         } else {
             leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue())
         }
-    }, [props.isMeusLeiloes])
+    }, [meus_leiloes])
 
     useEffect(() => {
-        setLoading(true)
-        leilaoService.getLeiloes(leiloesPaginacaoContext.dados)
-            .then((dados: ILeilaoPaginacao) => {
-                if (leiloesPaginacaoContext.dados.total === 0 && dados.resultados.length > 0)
-                    leiloesPaginacaoContext.setDados(dados);
-            }).catch((error: IErroDefault) => {
-                handleClickVariant(error.message, 'error');
-            }).finally(() => {
-                setLoading(false);
-            });
+        if (leiloesPaginacaoContext.dados.total === 0) {
+            setLoading(true)
+            leilaoService.getLeiloes(leiloesPaginacaoContext.dados)
+                .then((dados: ILeilaoPaginacao) => {
+                    if (leiloesPaginacaoContext.dados.total === 0 && dados.resultados.length > 0)
+                        leiloesPaginacaoContext.setDados(dados);
+                }).catch((error: IErroDefault) => {
+                    handleClickVariant(error.message, 'error');
+                }).finally(() => {
+                    setLoading(false);
+                });
+        }
     }, [leiloesPaginacaoContext.dados.total]);
 
     const handleClickVariant = (mensagem: string, variant: VariantType) => {
@@ -86,8 +89,8 @@ function HomePage(props: {
     return (
         <Container sx={{ mt: '20px' }}>
             {leiloesPaginacaoContext.dados.resultados.length > 0 &&
-                    <LeilaoList
-                        leilaoPaginacao={leiloesPaginacaoContext.dados} />
+                <LeilaoList
+                    leilaoPaginacao={leiloesPaginacaoContext.dados} />
             }
             {loading &&
                 <LeilaoListLoading />
@@ -96,6 +99,9 @@ function HomePage(props: {
                 <LeilaoProximaPagina
                     isProximaPagina={isProximaPagina()}
                     clickButtonMaisLeiloes={handleButtonMaisClick} />
+            }
+            {(loading === false && leiloesPaginacaoContext.dados.resultados.length === 0) &&
+                <Alert severity="warning">Nenhum leilão encontrado!</Alert>
             }
         </Container>
     );

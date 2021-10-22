@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import AppFormErro from 'components/AppFormErro';
 import { leilaoService } from 'services/leilao.service'
 import IErroDefault from 'interfaces/erro.default';
 import ILeilao from 'interfaces/leilao';
 import LeiloesPaginacaoContext from 'contexts/LeiloesPaginacaoContext';
 import { leiloesPaginacaoModel } from 'models/leiloes.paginacao.model';
-import { datasService } from 'services/datas.service';
 import LeilaoForm from 'components/LeilaoForm';
 import ILeilaoIncluir from 'interfaces/leilao.incluir';
 
