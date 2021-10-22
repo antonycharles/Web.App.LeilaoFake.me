@@ -1,6 +1,7 @@
 import ILance from "./lance";
 import ILink  from "./link";
 import IUsuario  from "./usuario";
+import ILeilaoImagem from "./leilao.imagem"
 
 export default interface ILeilao {
     id: string,
@@ -19,5 +20,7 @@ export default interface ILeilao {
     lanceGanhadorId: string,
     lanceGanhador: ILance,
     status: string,
-    links: Array<ILink>
+    links: Array<ILink>,
+    leilaoImagens: Array<ILeilaoImagem>,
+    linkCaminhoImagem: string
 }

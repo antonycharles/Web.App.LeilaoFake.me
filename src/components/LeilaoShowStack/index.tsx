@@ -13,13 +13,18 @@ function LeilaoShowStack(props: {
     let location = useLocation();
     let history = useHistory();
 
-    const handleClick = (event: any) => {
+    const handleClickAlterar = (event: any) => {
         event.stopPropagation();
         history.push(`/leilao/alterar/${props.leilao.id}`, { background: location });
     }
 
+    const handleClickEditarImagem = (event: any) => {
+        event.stopPropagation();
+        history.push(`/leilao/editar-imagem/${props.leilao.id}`, { background: location });
+    }
+
     return (
-        <Stack spacing={2} direction="row">
+        <Stack spacing={2} direction="row" >
             {props.leilao.links.map((item: ILink, index: number) => {
                 if (item.rel === "update") {
                     return (
@@ -27,8 +32,18 @@ function LeilaoShowStack(props: {
                             key={index}
                             variant="outlined"
                             color="secondary"
-                            onClick={handleClick}
+                            onClick={handleClickAlterar}
                         >Alterar</Button>);
+                }
+
+                if (item.rel === "add_imagens") {
+                    return (
+                        <Button
+                            key={index}
+                            variant="outlined"
+                            color="secondary"
+                            onClick={handleClickEditarImagem}
+                        >Editar Imagens</Button>);
                 }
 
                 if (item.rel === "delete") {

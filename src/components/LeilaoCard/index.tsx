@@ -27,7 +27,7 @@ export default function LeilaoCard(props: { leilao: ILeilao }) {
         <CardMedia
           component="img"
           height="200"
-          image="https://via.placeholder.com/350X300"
+          image={props.leilao.linkCaminhoImagem !== "" ? props.leilao.linkCaminhoImagem : 'https://via.placeholder.com/350X300' }
           alt={props.leilao.titulo}
         />
         <CardContent>

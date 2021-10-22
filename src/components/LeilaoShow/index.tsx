@@ -22,7 +22,7 @@ function LeilaoShow(props: {
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
-                    <img src="https://via.placeholder.com/350X300" style={{ width: '100%' }} alt="place holder" />
+                    <img src={props.leilao.linkCaminhoImagem !== "" ? props.leilao.linkCaminhoImagem : 'https://via.placeholder.com/350X300' } style={{ width: '100%' }} alt="place holder" />
                     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                         <ListItem>
                             <ListItemAvatar>

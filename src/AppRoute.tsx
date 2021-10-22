@@ -9,6 +9,7 @@ import LoginModal from './pages/LoginModal';
 import CadastroModal from './pages/CadastroModal';
 import LeilaoIncluirModal from './pages/Leilao/IncluirModal';
 import LeilaoAlterarModal from 'pages/Leilao/AlterarModal';
+import EditarImagem from 'pages/Leilao/EditarImagem';
 
 function AppRoute() {
 
@@ -40,6 +41,9 @@ function AppRoute() {
                     </Route>
                     <Route exact path="/leilao/alterar/:leilao_id">
                         <LeilaoAlterarModal />
+                    </Route>
+                    <Route exact path="/leilao/editar-imagem/:leilao_id">
+                        <EditarImagem />
                     </Route>
                     <Route exact path="/leilao/:leilao_id">
                         <LeilaoApresentacao isModal={true} />
