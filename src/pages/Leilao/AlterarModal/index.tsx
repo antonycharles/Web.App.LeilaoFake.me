@@ -45,8 +45,8 @@ function LeilaoAlterarModal() {
         leilaoService.update(link.href,leilaoAlterar)
             .then((resultado: string) => {
                 setErroMessage({} as IErroDefault)
-                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
-                history.goBack();
+                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
+                history.push('/?meus_leiloes=true');
             })
             .catch((erros: IErroDefault) => {
                 setErroMessage(erros)

@@ -10,38 +10,44 @@ import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import React, { useEffect } from "react";
 import { leilaoService } from "services/leilao.service";
 import { VariantType, useSnackbar } from 'notistack';
-import { useParams } from "react-router";
+import { useLocation } from "react-router-dom";
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
 
 function HomePage() {
     const [loading, setLoading] = React.useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+    const query = useQuery();
 
-    let { meus_leiloes } = useParams<{ meus_leiloes: string }>();
-
-    useEffect(() => {
-        if (meus_leiloes === "meus-leiloes") {
-            leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
-        } else {
-            leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.defaultValue())
-        }
-    }, [meus_leiloes])
 
     useEffect(() => {
-        if (leiloesPaginacaoContext.dados.total === 0) {
-            setLoading(true)
-            leilaoService.getLeiloes(leiloesPaginacaoContext.dados)
-                .then((dados: ILeilaoPaginacao) => {
-                    if (leiloesPaginacaoContext.dados.total === 0 && dados.resultados.length > 0)
-                        leiloesPaginacaoContext.setDados(dados);
-                }).catch((error: IErroDefault) => {
-                    handleClickVariant(error.message, 'error');
-                }).finally(() => {
-                    setLoading(false);
-                });
+        if(loading)
+            return;
+
+        let leiloesPag = leiloesPaginacaoModel.defaultValue();
+
+        if (query.get('meus_leiloes') === "true") {
+            leiloesPag.meusLeiloes = true;
         }
-    }, [leiloesPaginacaoContext.dados.total]);
+        
+        leiloesPaginacaoContext.setDados(leiloesPag)
+
+        setLoading(true)
+        leilaoService.getLeiloes(leiloesPag)
+            .then((dados: ILeilaoPaginacao) => {
+                dados.refrash = false;
+                if (dados.resultados.length > 0)
+                    leiloesPaginacaoContext.setDados(dados);
+            }).catch((error: IErroDefault) => {
+                handleClickVariant(error.message, 'error');
+            }).finally(() => {
+                setLoading(false);
+            });
+    }, [leiloesPaginacaoContext.dados.refrash === true]);
 
     const handleClickVariant = (mensagem: string, variant: VariantType) => {
         enqueueSnackbar(mensagem, {

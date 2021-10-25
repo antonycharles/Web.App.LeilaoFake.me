@@ -9,5 +9,6 @@ export default interface ILeilaoPaginacao {
     order: string,
     meusLeiloes: boolean,
     resultados : Array<ILeilao>,
-    links : Array<ILink>
+    links : Array<ILink>,
+    refrash?:boolean
 }

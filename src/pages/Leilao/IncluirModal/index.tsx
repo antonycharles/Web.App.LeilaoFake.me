@@ -27,8 +27,8 @@ function LeilaoIncluirModal() {
         leilaoService.incluir(leilaoIncluir)
             .then((resultado: ILeilao) => {
                 setErroMessage({} as IErroDefault)
-                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
-                history.push('/meus-leiloes');
+                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
+                history.push('/?meus_leiloes=true');
             })
             .catch((erros: IErroDefault) => {
                 setErroMessage(erros)

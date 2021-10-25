@@ -10,6 +10,8 @@ import Menu from '@mui/material/Menu';
 import { Logout } from '@mui/icons-material';
 import { Button, ButtonGroup, Container, ListItemIcon } from '@mui/material';
 import AutenticadoContext from 'contexts/AutenticadoContext';
+import LeiloesPaginacaoContext from "contexts/LeiloesPaginacaoContext";
+import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import { autenticadoModel } from 'models/autenticado.model';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -20,6 +22,7 @@ export default function AppHeader() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
+    const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -47,13 +50,13 @@ export default function AppHeader() {
             return ''
         }
     }
-    
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" color="default">
                 <Container>
                     <Toolbar>
-                        <Typography variant="h4" component="h1" sx={{ flexGrow: 1,fontWeight:'bold' }}>
+                        <Typography variant="h4" component="h1" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
                             Leilão Fake
                         </Typography>
                         <div>
@@ -106,6 +109,7 @@ export default function AppHeader() {
                                 {!autenticacaoContext.autenticado.authenticated &&
                                     <MenuItem component="a" onClick={(event: any) => {
                                         event.stopPropagation();
+                                        handleClose();
                                         history.push(`/login`, { background: location });
                                     }}>
                                         Logar</MenuItem>
@@ -113,6 +117,7 @@ export default function AppHeader() {
                                 {!autenticacaoContext.autenticado.authenticated &&
                                     <MenuItem component="a" onClick={(event: any) => {
                                         event.stopPropagation();
+                                        handleClose();
                                         history.push(`/cadastro`, { background: location });
                                     }}>Inscreva-se</MenuItem>
                                 }
@@ -129,15 +134,27 @@ export default function AppHeader() {
                     </Toolbar>
                 </Container>
                 <Container>
-                    <ButtonGroup variant="text" aria-label="text button group" color="inherit" fullWidth={true}> 
+                    <ButtonGroup variant="text" aria-label="text button group" color="inherit" fullWidth={true}>
                         <Button
                             sx={{ color: 'text.primary' }}
-                            onClick={() => history.push('/')}
+                            onClick={() => {
+                                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
+                                history.push({
+                                    pathname:'/',
+                                    search:''
+                                })
+                            }}
                         >Leilões</Button>
                         {autenticacaoContext.autenticado.authenticated &&
                             <Button
                                 sx={{ color: 'text.primary' }}
-                                onClick={ () => history.push('/meus-leiloes')}
+                                onClick={() => {
+                                    leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
+                                    history.push({
+                                        pathname:'/',
+                                        search:'meus_leiloes=true'
+                                    })
+                                }}
                             >Meus leilões</Button>
                         }
                         {autenticacaoContext.autenticado.authenticated &&

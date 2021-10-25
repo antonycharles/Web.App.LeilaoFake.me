@@ -22,6 +22,8 @@ function getApi(): AxiosInstance {
 }
 
 function defaultErro(error: any): IErroDefault {
+    console.log(JSON.stringify(error.response.data))
+
     if (error.response.data !== "") {
         return {
             code: error.response.data.code,

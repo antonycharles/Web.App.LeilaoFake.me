@@ -20,40 +20,21 @@ function AppRoute() {
     return (
         <>
             <Switch location={background || location}>
-                <Route exact path="/">
-                    <HomePage />
-                </Route>
-                <Route exact path="/:meus_leiloes">
-                    <HomePage />
-                </Route>
-                <Route exact path="/leilao/:leilao_id">
-                    <LeilaoApresentacao isModal={false} />
-                </Route>
-                <Route exact >
+                <Route exact path="/" component={HomePage}/>
+                <Route exact path="/leilao/:leilao_id" component={LeilaoApresentacao}/>
+                <Route>
                     <Pagina404 />
                 </Route>
             </Switch>
 
             {background &&
                 <Switch location={location}>
-                    <Route exact path="/leilao/incluir">
-                        <LeilaoIncluirModal />
-                    </Route>
-                    <Route exact path="/leilao/alterar/:leilao_id">
-                        <LeilaoAlterarModal />
-                    </Route>
-                    <Route exact path="/leilao/editar-imagem/:leilao_id">
-                        <EditarImagem />
-                    </Route>
-                    <Route exact path="/leilao/:leilao_id">
-                        <LeilaoApresentacao isModal={true} />
-                    </Route>
-                    <Route exact path="/login">
-                        <LoginModal />
-                    </Route>
-                    <Route exact path="/cadastro">
-                        <CadastroModal />
-                    </Route>
+                    <Route exact path="/leilao/incluir" component={LeilaoIncluirModal}/>
+                    <Route exact path="/leilao/alterar/:leilao_id" component={LeilaoAlterarModal}/>
+                    <Route exact path="/leilao/editar-imagem/:leilao_id" component={EditarImagem}/>
+                    <Route exact path="/leilao/:leilao_id" component={LeilaoApresentacao}/>
+                    <Route exact path="/login" component={LoginModal}/>
+                    <Route exact path="/cadastro" component={CadastroModal}/>
                 </Switch>
             }
         </>

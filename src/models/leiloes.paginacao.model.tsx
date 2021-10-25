@@ -5,7 +5,8 @@ export const leiloesPaginacaoModel = {
     meusLeiloes,
     updateDados,
     proximaPagina,
-    mudancaPesquisa
+    mudancaPesquisa,
+    refrash
 };
 
 function defaultValue() : ILeilaoPaginacao {
@@ -27,6 +28,11 @@ function meusLeiloes() : ILeilaoPaginacao{
     valorDefault.meusLeiloes = true;
 
     return valorDefault;
+}
+
+function refrash(dados:ILeilaoPaginacao) : ILeilaoPaginacao {
+    dados.refrash = true;
+    return dados;
 }
 
 function proximaPagina(dados:ILeilaoPaginacao) : ILeilaoPaginacao{

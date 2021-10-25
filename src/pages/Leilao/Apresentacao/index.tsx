@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Button, Container, Dialog, DialogActions, DialogContent } from "@mui/material";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import { Location } from "history";
 import { leilaoService } from "services/leilao.service";
 import { leilaoLanceService } from "services/leilao.lance.service";
 import ILeilao from "interfaces/leilao";
@@ -8,22 +9,26 @@ import IErroDefault from "interfaces/erro.default";
 import LeilaoShow from "components/LeilaoShow";
 import LanceForm from "components/LanceForm";
 import LeilaoShowStack from "components/LeilaoShowStack";
+import LeiloesPaginacaoContext from "contexts/LeiloesPaginacaoContext";
 import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import { useSnackbar } from 'notistack';
 import ILink from "interfaces/link";
 import ILance from "interfaces/lance";
-import LeiloesPaginacaoContext from "contexts/LeiloesPaginacaoContext";
 
-function Apresentacao(props: { isModal: boolean }) {
+function Apresentacao() {
     const [leilao, setLeilao] = React.useState<ILeilao>()
     const [erroMessageLance, setErroMessageLance] = React.useState({} as IErroDefault)
 
     let history = useHistory();
     let { leilao_id } = useParams<{ leilao_id: string }>();
-    
+
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
 
     const { enqueueSnackbar } = useSnackbar();
+
+    let location = useLocation<{ background?: Location<{} | null | undefined> }>();
+
+    let background = location.state && location.state.background;
 
     useEffect(() => {
         leilaoService.getLeilaoId(leilao_id)
@@ -44,8 +49,8 @@ function Apresentacao(props: { isModal: boolean }) {
         leilaoService.deletar(url)
             .then(response => {
                 enqueueSnackbar(response, { variant: "success" });
-                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.meusLeiloes())
-                history.push('/meus-leiloes')
+                leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
+                history.push('/?meus_leiloes=true');
             })
             .catch((erro: IErroDefault) => {
                 enqueueSnackbar(erro.message, {
@@ -78,14 +83,17 @@ function Apresentacao(props: { isModal: boolean }) {
         leilaoLanceService.incluir(link.href, { leilaoId: leilao?.id as string, valor: valor })
             .then((resultado: ILance) => {
                 setErroMessageLance({} as IErroDefault)
-                history.go(0);
+                enqueueSnackbar('Lance adicionado com sucesso!', { variant: "success" });
+                let leilaoUpdate = leilao;
+                leilaoUpdate?.lances.push(resultado);
+                setLeilao(leilaoUpdate);
             })
             .catch((erros: IErroDefault) => {
                 setErroMessageLance(erros)
             })
     }
 
-    const lanceForm = () : JSX.Element => {
+    const lanceForm = (): JSX.Element => {
         const link = leilao?.links.find(x => x.rel === "add_lance") as ILink;
         if (link !== undefined) {
             return (
@@ -97,25 +105,31 @@ function Apresentacao(props: { isModal: boolean }) {
             );
         }
 
-        return(<></>);
+        return (<></>);
+    }
+
+    const leilaoShow = (): JSX.Element => {
+        return (
+            <LeilaoShow
+                leilao={leilao as ILeilao}
+                leilaoShowStack={
+                    <LeilaoShowStack
+                        leilao={leilao as ILeilao}
+                        clickButtonDeletarLeilao={handleButtonDeleteclick}
+                        clickButtonExecutaPatch={handleButtonPatchClick}
+                    />
+                }
+                lanceForm={lanceForm()}
+            />
+        );
     }
 
     return (
         <>
-            {props.isModal ?
+            {background ?
                 <Dialog open={true} onClose={handleClose} fullWidth={true} maxWidth="lg">
                     <DialogContent>
-                        <LeilaoShow
-                            leilao={leilao as ILeilao}
-                            leilaoShowStack={
-                                <LeilaoShowStack
-                                    leilao={leilao as ILeilao}
-                                    clickButtonDeletarLeilao={handleButtonDeleteclick}
-                                    clickButtonExecutaPatch={handleButtonPatchClick}
-                                />
-                            }
-                            lanceForm={lanceForm()}
-                        />
+                        {leilaoShow()}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="error">Sair</Button>
@@ -123,17 +137,7 @@ function Apresentacao(props: { isModal: boolean }) {
                 </Dialog>
                 :
                 <Container sx={{ mt: '20px' }}>
-                    <LeilaoShow
-                        leilao={leilao as ILeilao}
-                        leilaoShowStack={
-                            <LeilaoShowStack
-                                leilao={leilao as ILeilao}
-                                clickButtonDeletarLeilao={handleButtonDeleteclick}
-                                clickButtonExecutaPatch={handleButtonPatchClick}
-                            />
-                        }
-                        lanceForm={lanceForm()}
-                    />
+                    {leilaoShow()}
                 </Container>
             }
         </>

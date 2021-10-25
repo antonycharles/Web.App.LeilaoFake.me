@@ -95,6 +95,16 @@ function LeilaoShowStack(props: {
                             onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
                         >Tornar público</Button>)
                 }
+
+                if (item.rel === "tornar_privado") {
+                    return (
+                        <Button
+                            key={index}
+                            variant="outlined"
+                            color="info"
+                            onClick={() => props.clickButtonExecutaPatch(item.href, 'Leilão alterado com sucesso!')}
+                        >Tornar privado</Button>)
+                }
             })}
         </Stack>
     )
