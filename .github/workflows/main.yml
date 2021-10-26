@@ -22,9 +22,6 @@ jobs:
     
     - name: Install NPM packages
       run: npm install
-    
-    - name: Build project
-      run: npm run build
 
     - name: Upload production-ready build files
       uses: actions/upload-artifact@v2
