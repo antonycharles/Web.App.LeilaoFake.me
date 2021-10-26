@@ -20,11 +20,20 @@ jobs:
     - name: Clear package-lock
       run: rm -rf node_modules package-lock.json
     
+    - name: Ls la
+      run: ls -la
+
     - name: Install NPM packages
       run: sudo npm install
     
+    - name: Ls la
+      run: ls -la
+
     - name: Build project
       run: sudo npm run build
+
+    - name: Ls la
+      run: ls -la
 
     - name: Upload production-ready build files
       uses: actions/upload-artifact@v2
