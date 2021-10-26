@@ -58,4 +58,7 @@ jobs:
           envs: host, username, port, key
           source: "."
           target: "/home/apps/leilaofake_webapp"
+
+      - name: Ls la
+        run: ls -la
           
