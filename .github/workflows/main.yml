@@ -21,7 +21,10 @@ jobs:
       run: rm -rf node_modules package-lock.json
     
     - name: Install NPM packages
-      run: npm install
+      run: sudo npm install
+    
+    - name: Build project
+      run: sudo npm run build
 
     - name: Upload production-ready build files
       uses: actions/upload-artifact@v2
