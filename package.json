@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.15.8",
     "@types/react-router-dom": "^5.3.1"
   }
 }
