@@ -22,7 +22,6 @@ function getApi(): AxiosInstance {
 }
 
 function defaultErro(error: any): IErroDefault {
-    console.log(JSON.stringify(error.response.data))
 
     if (error.response.data !== "") {
         return {
@@ -34,9 +33,6 @@ function defaultErro(error: any): IErroDefault {
     }
 
     let mensagem = error.response.status + ' - ' + error.response.statusText;
-
-    if(error.response.status === 403)
-        mensagem = error.response.status + ' - Acesso não autorizado para está funcionalidade!';
 
     return {message:mensagem}
 }

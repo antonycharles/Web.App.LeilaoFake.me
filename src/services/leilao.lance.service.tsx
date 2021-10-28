@@ -12,7 +12,6 @@ function incluir(url:string, lance:ILanceIncluir) : Promise<ILance> {
         return response.data as unknown as ILance;
     })
     .then((dados : ILance) => {
-        console.log(dados)
         return dados;
     })
     .catch(error => {

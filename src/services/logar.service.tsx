@@ -33,7 +33,6 @@ function autenticacaoServidor(email: string): Promise<IUsuarioLogado> {
             return dados;
         })
         .catch(error => {
-            console.log(error.response)
             return Promise.reject(baseService.defaultErro(error));
         });
 }

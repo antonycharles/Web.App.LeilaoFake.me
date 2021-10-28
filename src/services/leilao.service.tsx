@@ -27,7 +27,6 @@ function getLeiloes(dados: ILeilaoPaginacao): Promise<ILeilaoPaginacao> {
             return response.data as unknown as ILeilaoPaginacao;
         })
         .then((dados: ILeilaoPaginacao) => {
-            console.log(dados);
             return dados;
         })
         .catch(error => {
@@ -41,7 +40,6 @@ function getLeilaoId(leilao_id: string): Promise<ILeilao> {
             return response.data as unknown as ILeilao;
         })
         .then((dados : ILeilao) => {
-            console.log(dados)
             return dados;
         })
         .catch(error => {
