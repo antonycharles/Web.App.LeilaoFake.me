@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Box, Button, Dialog, DialogContent, DialogTitle, Input } from "@mui/material";
 import { useHistory, useParams } from "react-router-dom";
 import { leilaoService } from 'services/leilao.service'
 import { leilaoImagemService } from 'services/leilao.imagem.service'
@@ -14,7 +13,6 @@ import { CloudUpload } from '@mui/icons-material';
 
 function EditarImagem() {
   const [leilao, setLeilao] = React.useState({} as ILeilao);
-  const [erroMessage, setErroMessage] = React.useState({} as IErroDefault)
 
   let { leilao_id } = useParams<{ leilao_id: string }>();
   const { enqueueSnackbar } = useSnackbar();
@@ -24,7 +22,7 @@ function EditarImagem() {
   useEffect(() => {
     leilaoService.getLeilaoId(leilao_id)
       .then((dados: ILeilao) => {
-        if (leilao?.id !== leilao_id)
+        if (leilao.id !== leilao_id)
           setLeilao(dados)
       }).catch((erros: IErroDefault) => {
         history.push('/404');
@@ -36,25 +34,19 @@ function EditarImagem() {
     history.goBack();
   };
 
-  const getUrlAlterar = (): ILink => {
-    return leilao.links.find(x => x.rel === 'add_imagens') as ILink;
-  }
-
   const handleButtonIncluir = (event: any) => {
     const arquivo: File = event.target.files[0];
-    const link = getUrlAlterar();
+    const link = leilao.links.find(x => x.rel === 'add_imagens') as ILink;
 
     leilaoImagemService.incluir(link.href, leilao.id, arquivo)
       .then((resultado: ILeilaoImagem) => {
-        setErroMessage({} as IErroDefault)
         let alteracaoLeilao = leilao;
         alteracaoLeilao.leilaoImagens.push(resultado);
         setLeilao(alteracaoLeilao);
       })
       .catch((erros: IErroDefault) => {
-        setErroMessage(erros)
+        console.log(erros)
       })
-
   };
 
   const handleButtonDeleteclick = (id: number, url: string) => {
@@ -78,10 +70,6 @@ function EditarImagem() {
       });
   }
 
-  const Input = styled('input')({
-    display: 'none',
-  });
-
 
   return (
     <div>
@@ -95,7 +83,7 @@ function EditarImagem() {
           />
           <Box>
             <label htmlFor="contained-button-file">
-              <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleButtonIncluir} />
+              <Input type="file" inputProps={{ accept: 'image/*' }} sx={{display:'none'}} id="contained-button-file"  onChange={handleButtonIncluir} />
               <Button variant="contained" component="span" fullWidth={true}>
                 <CloudUpload sx={{mr:'10px'}}/> Enviar imagem
               </Button>

@@ -35,12 +35,8 @@ function LeilaoAlterarModal() {
         history.goBack();
     };
 
-    const getUrlAlterar = () : ILink => {
-        return leilao.links.find(x => x.rel === 'update') as ILink;
-    }
-
     const handleSubmit = (leilaoAlterar : ILeilaoIncluir) => {
-        const link = getUrlAlterar();
+        const link = leilao.links.find(x => x.rel === 'update') as ILink;
 
         leilaoService.update(link.href,leilaoAlterar)
             .then((resultado: string) => {
