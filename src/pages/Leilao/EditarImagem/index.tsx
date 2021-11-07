@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Dialog, DialogContent, DialogTitle, Input } from "@mui/material";
 import { useHistory, useParams } from "react-router-dom";
-import { leilaoService } from 'services/leilao.service'
-import { leilaoImagemService } from 'services/leilao.imagem.service'
 import IErroDefault from 'interfaces/erro.default';
 import ILeilao from 'interfaces/leilao';
 import ILink from 'interfaces/link';
@@ -10,6 +8,7 @@ import { useSnackbar } from 'notistack';
 import ILeilaoImagem from 'interfaces/leilao.imagem';
 import CustomImageList from './components/CustomImageList';
 import { CloudUpload } from '@mui/icons-material';
+import ServicesContext from 'contexts/ServicesContext';
 
 function EditarImagem() {
   const [leilao, setLeilao] = React.useState({} as ILeilao);
@@ -18,9 +17,10 @@ function EditarImagem() {
   const { enqueueSnackbar } = useSnackbar();
 
   let history = useHistory();
+  const servicesContext = React.useContext(ServicesContext);
 
   useEffect(() => {
-    leilaoService.getLeilaoId(leilao_id)
+    servicesContext.leilaoService.getLeilaoId(leilao_id)
       .then((dados: ILeilao) => {
         if (leilao.id !== leilao_id)
           setLeilao(dados)
@@ -38,7 +38,7 @@ function EditarImagem() {
     const arquivo: File = event.target.files[0];
     const link = leilao.links.find(x => x.rel === 'add_imagens') as ILink;
 
-    leilaoImagemService.incluir(link.href, leilao.id, arquivo)
+    servicesContext.leilaoImagemService.incluir(link.href, leilao.id, arquivo)
       .then((resultado: ILeilaoImagem) => {
         let alteracaoLeilao = leilao;
         alteracaoLeilao.leilaoImagens.push(resultado);
@@ -50,7 +50,7 @@ function EditarImagem() {
   };
 
   const handleButtonDeleteclick = (id: number, url: string) => {
-    leilaoImagemService.deletar(url)
+    servicesContext.leilaoImagemService.deletar(url)
       .then(response => {
         enqueueSnackbar(response, { variant: "success" });
 

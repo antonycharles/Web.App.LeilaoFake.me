@@ -2,12 +2,12 @@ import moment from "moment";
 import IUsuarioLogado from "../interfaces/usuario.logado";
 
 export const autenticadoModel = {
-    userAutenticado,
-    sair
+    userAutenticado
 };
 
 function userAutenticado(): IUsuarioLogado {
 
+    /*
     const userInfo = localStorage.getItem('user-info')
     if (userInfo && userInfo !== '') {
         const usuarioLogado: IUsuarioLogado = JSON.parse(userInfo);
@@ -19,8 +19,7 @@ function userAutenticado(): IUsuarioLogado {
             return usuarioLogado;
         }
         
-        sair();
-    }
+    }*/
 
     return {
         authenticated: false,
@@ -35,9 +34,3 @@ function userAutenticado(): IUsuarioLogado {
         }
     }
 }
-
-
-function sair(): void {
-    localStorage.setItem('user-info', '');
-}
-

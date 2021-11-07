@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import IErroDefault from 'interfaces/erro.default';
-import { cadastroService } from 'services/cadastro.service';
 import AutenticadoContext from 'contexts/AutenticadoContext';
 import IUsuarioLogado from 'interfaces/usuario.logado';
 import AppFormErro from 'components/AppFormErro';
 import { useHistory } from 'react-router-dom';
+import ServicesContext from 'contexts/ServicesContext';
 
 function CadastroModal() {
     let history = useHistory();
@@ -15,6 +15,7 @@ function CadastroModal() {
     const [erroMessage, setErroMessage] = React.useState({})
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
+    const servicesContext = React.useContext(ServicesContext);
 
     const handleClose = (event:  React.FormEvent<EventTarget>) => {
         event.stopPropagation();
@@ -24,7 +25,7 @@ function CadastroModal() {
     const handleSubmit = (event: React.FormEvent<EventTarget>) => {
         event.preventDefault();
 
-        cadastroService.cadastrar(nome, email)
+        servicesContext.cadastroService.cadastrar(nome, email)
             .then((resultado: IUsuarioLogado) => {
                 setEmail("");
                 setErroMessage({})

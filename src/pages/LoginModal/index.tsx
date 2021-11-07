@@ -5,13 +5,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { logarService } from 'services/logar.service'
 import IErroDefault from 'interfaces/erro.default';
 import AutenticadoContext from 'contexts/AutenticadoContext';
 import IUsuarioLogado from 'interfaces/usuario.logado';
 import AppFormErro from 'components/AppFormErro';
 import { useHistory } from "react-router-dom";
 import { Box } from '@mui/material';
+import ServicesContext from 'contexts/ServicesContext';
 
 function LoginModal() {
     const [email, setEmail] = React.useState("");
@@ -20,6 +20,7 @@ function LoginModal() {
     let history = useHistory();
 
     const autenticacaoContext = React.useContext(AutenticadoContext);
+    const servicesContext = React.useContext(ServicesContext);
 
     const handleClose = (event:  React.FormEvent<EventTarget>) => {
         event.stopPropagation();
@@ -30,7 +31,7 @@ function LoginModal() {
         event.preventDefault();
         event.stopPropagation();
 
-        logarService.logar(email)
+        servicesContext.logarService.logar(email)
             .then((resultado: IUsuarioLogado) => {
                 setEmail("");
                 setErroMessage({})

@@ -8,9 +8,9 @@ import LeilaoListLoading from "components/LeilaoListLoading";
 import ILink from "interfaces/link";
 import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import React, { useEffect } from "react";
-import { leilaoService } from "services/leilao.service";
 import { VariantType, useSnackbar } from 'notistack';
 import { useLocation } from "react-router-dom";
+import ServicesContext from "contexts/ServicesContext";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -21,6 +21,7 @@ function HomePage() {
     const { enqueueSnackbar } = useSnackbar();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+    const servicesContext = React.useContext(ServicesContext);
     const query = useQuery();
 
 
@@ -37,7 +38,7 @@ function HomePage() {
         leiloesPaginacaoContext.setDados(leiloesPag)
 
         setLoading(true)
-        leilaoService.getLeiloes(leiloesPag)
+        servicesContext.leilaoService.getLeiloes(leiloesPag)
             .then((dados: ILeilaoPaginacao) => {
                 dados.refrash = false;
                 if (dados.resultados.length > 0)
@@ -66,7 +67,7 @@ function HomePage() {
     const handleButtonMaisClick = () => {
         setLoading(true)
         const dados = leiloesPaginacaoModel.proximaPagina(leiloesPaginacaoContext.dados);
-        leilaoService.getLeiloes(dados)
+        servicesContext.leilaoService.getLeiloes(dados)
             .then((dados: ILeilaoPaginacao) => {
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.updateDados(
                     leiloesPaginacaoContext.dados,

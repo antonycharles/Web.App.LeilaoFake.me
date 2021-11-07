@@ -1,39 +1,39 @@
-import { baseService } from "./base.service";
 import ILeilaoImagem from "../interfaces/leilao.imagem"
+import IApiService from "./api.service.interface";
+import ILeilaoImagemService from "./leilao.imagem.service.interface";
 
-export const leilaoImagemService = {
-    incluir,
-    deletar
-}
+export default class LeilaoImagemService implements ILeilaoImagemService{
 
-function incluir(url:string, leilaoId:string, arquivo:File): Promise<ILeilaoImagem> {
-    var formData = new FormData();
+    constructor(
+        private api : IApiService
+    ){}
 
-    formData.append("leilaoId", leilaoId);
-    formData.append("imagem", arquivo);
-
-    return baseService.getApi().post(url, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
+    public async incluir(url:string, leilaoId:string, arquivo:File): Promise<ILeilaoImagem> {
+        var formData = new FormData();
+    
+        formData.append("leilaoId", leilaoId);
+        formData.append("imagem", arquivo);
+    
+        try {
+            const response = await this.api.getApi().post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const dados = response.data as unknown as ILeilaoImagem;
+            return dados;
+        } catch (error) {
+            return await Promise.reject(this.api.defaultErro(error));
         }
-    })
-    .then(response => {
-        return response.data as unknown as ILeilaoImagem;
-    })
-    .then((dados : ILeilaoImagem) => {
-        return dados;
-    })
-    .catch(error => {
-        return Promise.reject(baseService.defaultErro(error));
-    });
+    }
+    
+    public async deletar(url:string) : Promise<string> {
+        try {
+            await this.api.getApi().delete(url);
+            return 'Imagem leilão deletado com sucesso!';
+        } catch (error) {
+            return await Promise.reject(this.api.defaultErro(error));
+        }
+    }
 }
 
-function deletar(url:string) : Promise<string> {
-    return baseService.getApi().delete(url)
-    .then(response => {
-        return 'Imagem leilão deletado com sucesso!';
-    })
-    .catch(error => {
-        return Promise.reject(baseService.defaultErro(error));
-    });
-}

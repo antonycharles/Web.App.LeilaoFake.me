@@ -30,8 +30,8 @@ export default function AppHeader() {
     };
 
     const handleClickSair = () => {
-        autenticadoModel.sair()
         autenticacaoContext.setAuthenticated(autenticadoModel.userAutenticado());
+        leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoModel.defaultValue()))
         history.push('/')
 
     }

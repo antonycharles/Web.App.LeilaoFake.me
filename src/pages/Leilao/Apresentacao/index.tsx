@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { Button, Container, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { Location } from "history";
-import { leilaoService } from "services/leilao.service";
-import { leilaoLanceService } from "services/leilao.lance.service";
 import ILeilao from "interfaces/leilao";
 import IErroDefault from "interfaces/erro.default";
 import LeilaoShow from "components/LeilaoShow";
@@ -14,6 +12,7 @@ import { leiloesPaginacaoModel } from "models/leiloes.paginacao.model";
 import { useSnackbar } from 'notistack';
 import ILink from "interfaces/link";
 import ILance from "interfaces/lance";
+import ServicesContext from "contexts/ServicesContext";
 
 function Apresentacao() {
     const [leilao, setLeilao] = React.useState<ILeilao>()
@@ -23,6 +22,7 @@ function Apresentacao() {
     let { leilao_id } = useParams<{ leilao_id: string }>();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+    const servicesContext = React.useContext(ServicesContext);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -31,7 +31,7 @@ function Apresentacao() {
     let background = location.state && location.state.background;
 
     useEffect(() => {
-        leilaoService.getLeilaoId(leilao_id)
+        servicesContext.leilaoService.getLeilaoId(leilao_id)
             .then((dados: ILeilao) => {
                 if (leilao === undefined)
                     setLeilao(dados)
@@ -46,7 +46,7 @@ function Apresentacao() {
     };
 
     const handleButtonDeleteclick = (url: string) => {
-        leilaoService.deletar(url)
+        servicesContext.leilaoService.deletar(url)
             .then(response => {
                 enqueueSnackbar(response, { variant: "success" });
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
@@ -63,7 +63,7 @@ function Apresentacao() {
     }
 
     const handleButtonPatchClick = (url: string, mensagem: string) => {
-        leilaoService.executaPatch(url, mensagem)
+        servicesContext.leilaoService.executaPatch(url, mensagem)
             .then(response => {
                 enqueueSnackbar(response, { variant: "success" });
                 setLeilao({ ...leilao, id: "" } as ILeilao);
@@ -80,7 +80,7 @@ function Apresentacao() {
 
     const handleSubmitLance = (valor: number) => {
         const link = leilao?.links.find(x => x.rel === "add_lance") as ILink;
-        leilaoLanceService.incluir(link.href, { leilaoId: leilao?.id as string, valor: valor })
+        servicesContext.leilaoLanceService.incluir(link.href, { leilaoId: leilao?.id as string, valor: valor })
             .then((resultado: ILance) => {
                 setErroMessageLance({} as IErroDefault)
                 enqueueSnackbar('Lance adicionado com sucesso!', { variant: "success" });

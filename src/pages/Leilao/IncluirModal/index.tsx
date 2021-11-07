@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import { leilaoService } from 'services/leilao.service'
 import IErroDefault from 'interfaces/erro.default';
 import ILeilao from 'interfaces/leilao';
 import LeiloesPaginacaoContext from 'contexts/LeiloesPaginacaoContext';
 import { leiloesPaginacaoModel } from 'models/leiloes.paginacao.model';
 import LeilaoForm from 'components/LeilaoForm';
 import ILeilaoIncluir from 'interfaces/leilao.incluir';
+import ServicesContext from 'contexts/ServicesContext';
 
 function LeilaoIncluirModal() {
     const [leilao, setLeilao] = React.useState({} as ILeilao);
     const [erroMessage, setErroMessage] = React.useState({} as IErroDefault)
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+    const servicesContext = React.useContext(ServicesContext);
 
     let history = useHistory();
 
@@ -24,7 +25,7 @@ function LeilaoIncluirModal() {
 
     const handleSubmit = (leilaoIncluir : ILeilaoIncluir) => {
         setLeilao({ ...leilao, ...leilaoIncluir } as unknown as ILeilao)
-        leilaoService.incluir(leilaoIncluir)
+        servicesContext.leilaoService.incluir(leilaoIncluir)
             .then((resultado: ILeilao) => {
                 setErroMessage({} as IErroDefault)
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))

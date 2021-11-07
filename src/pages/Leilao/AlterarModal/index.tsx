@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useHistory, useParams } from "react-router-dom";
-import { leilaoService } from 'services/leilao.service'
 import IErroDefault from 'interfaces/erro.default';
 import ILeilao from 'interfaces/leilao';
 import LeiloesPaginacaoContext from 'contexts/LeiloesPaginacaoContext';
@@ -9,19 +8,21 @@ import { leiloesPaginacaoModel } from 'models/leiloes.paginacao.model';
 import LeilaoForm from 'components/LeilaoForm';
 import ILeilaoIncluir from 'interfaces/leilao.incluir';
 import ILink from 'interfaces/link';
+import ServicesContext from 'contexts/ServicesContext';
 
 function LeilaoAlterarModal() {
     const [leilao, setLeilao] = React.useState({} as ILeilao);
     const [erroMessage, setErroMessage] = React.useState({} as IErroDefault)
-    
+
     let { leilao_id } = useParams<{ leilao_id: string }>();
 
     const leiloesPaginacaoContext = React.useContext(LeiloesPaginacaoContext);
+    const servicesContext = React.useContext(ServicesContext);
 
     let history = useHistory();
 
     useEffect(() => {
-        leilaoService.getLeilaoId(leilao_id)
+        servicesContext.leilaoService.getLeilaoId(leilao_id)
             .then((dados: ILeilao) => {
                 if (leilao?.id !== leilao_id)
                     setLeilao(dados)
@@ -35,10 +36,10 @@ function LeilaoAlterarModal() {
         history.goBack();
     };
 
-    const handleSubmit = (leilaoAlterar : ILeilaoIncluir) => {
+    const handleSubmit = (leilaoAlterar: ILeilaoIncluir) => {
         const link = leilao.links.find(x => x.rel === 'update') as ILink;
 
-        leilaoService.update(link.href,leilaoAlterar)
+        servicesContext.leilaoService.update(link.href, leilaoAlterar)
             .then((resultado: string) => {
                 setErroMessage({} as IErroDefault)
                 leiloesPaginacaoContext.setDados(leiloesPaginacaoModel.refrash(leiloesPaginacaoContext.dados))
