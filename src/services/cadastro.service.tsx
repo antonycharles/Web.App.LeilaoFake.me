@@ -23,7 +23,7 @@ export default class CadastroService implements ICadastroService {
     
     
         try {
-            const response = await this.api.getApi().post(`/Login/cadastro`, request);
+            const response = await this.api.getApi().post(`/signup`, request);
             const dados = response.data as unknown as IUsuarioLogado;
             return dados;
         } catch (error) {
