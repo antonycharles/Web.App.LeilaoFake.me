@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - mainteste
 name: Deploy
 jobs:
   build:
